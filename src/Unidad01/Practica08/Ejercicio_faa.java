@@ -1,142 +1,116 @@
-
 package Unidad01.Practica08;
 
-/**
- *
- * @author kgv17
- */
-import java.io.RandomAccessFile;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
+/**
+ * Clase para manejar registros en un archivo binario.
+ * 
+ * @author kgv17
+ */
 public class Ejercicio_faa {
 
-    private final File f;
-    private final List<String> campos;
-    private final List<Integer> bytesCampos;
-    private long bytesLinea;       // Bytes por linea
-    private long numFilas = 0;    // Número de filas 
+    private final File file;
+    private final List<String> fields;
+    private final List<Integer> fieldLengths;
+    private final long bytesPerLine; // Bytes por línea
+    private final long numRows;      // Número de filas
     
-    public Ejercicio_faa(String path, List<String> campos, List<Integer> bytesCampos) throws IOException {
-        
-        // Crea el archivo
-        this.f = new File(path);
-        if (!this.f.exists()) {
-            this.f.createNewFile();
+    // Constructor
+    public Ejercicio_faa(String path, List<String> fields, List<Integer> fieldLengths) throws IOException {
+        this.file = new File(path);
+        if (!this.file.exists()) {
+            this.file.createNewFile();
         }
-        
-        this.campos = campos;
-        this.bytesCampos = bytesCampos;
-        
-        this.bytesLinea = 0;
-        
-        // Muestra los bytes por campo en la terminal
+
+        this.fields = fields;
+        this.fieldLengths = fieldLengths;
+
+        // Calcular los bytes por línea
+        this.bytesPerLine = fieldLengths.stream().mapToInt(Integer::intValue).sum();
+
+        // Mostrar bytes por campo en la terminal
         System.out.println("\nBYTES POR CAMPO / COLUMNA");
-        
-        // Muestra todos los campos con su longitud e incrementa bytesLinea según la longitud de cada campo
-        for (int i = 0; i < campos.size(); i++) {
-            
-            String campo = campos.get(i);
-            int longitud = bytesCampos.get(i);
-
-            System.out.print(campo + ": " + longitud + "\n");
-            this.bytesLinea += longitud; // 
-            
+        for (int i = 0; i < fields.size(); i++) {
+            System.out.println(fields.get(i) + ": " + fieldLengths.get(i));
         }
-        
-        System.out.println("\n");
+        System.out.println();
 
-        // Establece el número de filas dividiendo el length total del archivo entre el número de bytes por línea
-        if (f.exists() && bytesLinea > 0) {
-            this.numFilas = (int) (f.length() / this.bytesLinea);
-        }
+        // Establece el número de filas
+        this.numRows = this.bytesPerLine > 0 ? this.file.length() / this.bytesPerLine : 0;
     }
-    
-    int r = 1;
-    
-    public void insertar( Map<String,String> datos, long pos ){
-        // ABRIR ARCHIVO BINARIO
-        try( RandomAccessFile rndFile = new RandomAccessFile( this.f, "rws" ) ) {
-            System.out.println("REGISTRO: "+ r++);
-            // POSICIONARNOS PARA ESCRIBIR
-            rndFile.seek( pos * this.bytesLinea );
-            
-            
-            // Muestra los bytes por campo en la terminal
-            for (int i = 0; i < campos.size(); i++) {
-                String campo = campos.get(i);
-                int longitud = bytesCampos.get(i);
-                // VALOR Columna
-                String valorCampo = datos.get(campo);
 
-                if( valorCampo == null ) {
-                    valorCampo = "";
-                }
-                
-                 String valorCampoForm = String.format("%1$-" + longitud + "s", valorCampo);
-                
-                System.out.print(campo+": "+valorCampoForm + "\n");
-                
-                rndFile.write(valorCampoForm.getBytes("UTF-8"),0, longitud);
+    // Método para obtener el número de filas
+    public long getNumRows() {
+        return numRows;
+    }
+
+    // Método para insertar registros en el archivo
+    public void insertRecord(Map<String, String> data, long position) {
+        try (RandomAccessFile rndFile = new RandomAccessFile(this.file, "rws")) {
+            System.out.println("INSERTANDO REGISTRO EN POSICIÓN: " + position);
+
+            // Posicionarse para escribir
+            rndFile.seek(position * this.bytesPerLine);
+
+            // Escribir cada campo en el archivo
+            for (int i = 0; i < fields.size(); i++) {
+                String field = fields.get(i);
+                int length = fieldLengths.get(i);
+                String fieldValue = data.getOrDefault(field, "");
+
+                // Formatear valor al tamaño requerido
+                String formattedValue = String.format("%1$-" + length + "s", fieldValue);
+
+                System.out.println(field + ": " + formattedValue);
+
+                // Escribir en el archivo
+                rndFile.write(formattedValue.getBytes(StandardCharsets.UTF_8), 0, length);
             }
-            System.out.println("\n");
-        }
-        catch( Exception ex ){
-            System.out.println("ERROR: "+ex.getMessage());
+            System.out.println();
+        } catch (IOException ex) {
+            System.err.println("ERROR: " + ex.getMessage());
         }
     }
-    
-    public static void main(String args[]){
-        List campos = new ArrayList();
-        List bytesCampos = new ArrayList();
-        
-        campos.add( "DNI" );
-        campos.add( "NOMBRE" );
-        campos.add( "DIRECCION" );
-        campos.add( "CP" );
-        
-        bytesCampos.add( 9 );
-        bytesCampos.add( 32 );
-        bytesCampos.add( 32 );
-        bytesCampos.add( 5 );
-        
+
+    // Método main para probar la clase
+    public static void main(String[] args) {
+        List<String> fields = List.of("DNI", "NOMBRE", "DIRECCION", "CP");
+        List<Integer> fieldLengths = List.of(9, 32, 32, 5);
+
         try {
-            Ejercicio_faa faa = new Ejercicio_faa("C:/Users/kgv17/OneDrive/Escritorio/archivo.dat", campos, bytesCampos );
-            Map datos = new HashMap();
-            
-            // PRIMER REGISTRO
-            datos.put("DNI", "11111111A");
-            datos.put("NOMBRE", "Nombre y Apellidos 1");            
-            datos.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            datos.put("CP", "543210");
-            faa.insertar(datos,0);
-            datos.clear();
-            
-            // SEGUNDO REGISTRO
-            datos.put("DNI", "22222222B");
-            datos.put("NOMBRE", "Nombre2");
-            datos.put("CP", "123456");
-            datos.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            faa.insertar(datos,1);
-            datos.clear();
-            
-            // TERCER REGISTRO
-            datos.put("DNI", "333333B");
-            datos.put("NOMBRE", "Nombre3");
-            datos.put("CP", "56789");
-            datos.put("DIRECCION", "DIrECCION");
-            faa.insertar(datos,2);
-            datos.clear();
-        }
-        catch( IOException e ){
-            System.err.print("ERROR: " + e.getMessage() );
-        }
-        catch( Exception e ){
-            System.err.print("ERROR:" + e.getMessage() );
+            Ejercicio_faa faa = new Ejercicio_faa("C:/Users/kgv17/OneDrive/Escritorio/2º DAM 24-25/ACCESO A DATOS/AccesoDatos/src/Unidad01/Practica08/archivo.txt", fields, fieldLengths);
+            Map<String, String> data = new HashMap<>();
+
+            // Primer registro
+            data.put("DNI", "11111111A");
+            data.put("NOMBRE", "Nombre y Apellidos 1");
+            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+            data.put("CP", "543210");
+            faa.insertRecord(data, 0);
+            data.clear();
+
+            // Segundo registro
+            data.put("DNI", "22222222B");
+            data.put("NOMBRE", "Nombre2");
+            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+            data.put("CP", "123456");
+            faa.insertRecord(data, 1);
+            data.clear();
+
+            // Tercer registro
+            data.put("DNI", "33333333B");
+            data.put("NOMBRE", "Nombre3");
+            data.put("DIRECCION", "Dirección");
+            data.put("CP", "56789");
+            faa.insertRecord(data, 2);
+        } catch (IOException e) {
+            System.err.println("ERROR: " + e.getMessage());
         }
     }
 }
