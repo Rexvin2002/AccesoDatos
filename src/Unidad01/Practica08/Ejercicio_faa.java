@@ -1,116 +1,149 @@
 package Unidad01.Practica08;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
 /**
- * Clase para manejar registros en un archivo binario.
- * 
+ *
  * @author kgv17
  */
+import java.io.RandomAccessFile;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class Ejercicio_faa {
 
-    private final File file;
-    private final List<String> fields;
-    private final List<Integer> fieldLengths;
-    private final long bytesPerLine; // Bytes por línea
-    private final long numRows;      // Número de filas
+    private final File f;
+    private final List<String> campos;
+    private final List<Integer> camposLength; // V2
+    private long longReg;       // Bytes por registro >>> LINEA
+    private long numReg = 0;    // Número de registros dentro del fichero
     
-    // Constructor
-    public Ejercicio_faa(String path, List<String> fields, List<Integer> fieldLengths) throws IOException {
-        this.file = new File(path);
-        if (!this.file.exists()) {
-            this.file.createNewFile();
+    Ejercicio_faa( String path, List<String> campos, List<Integer> camposLength ) throws IOException
+    {
+        this.campos = campos;
+        this.camposLength = camposLength;
+      
+        this.f = new File( path );
+        this.longReg = 0;
+        
+        for( Integer campo: camposLength ){
+            System.out.print("*"+campo+"*");
+            this.longReg += campo;
         }
-
-        this.fields = fields;
-        this.fieldLengths = fieldLengths;
-
-        // Calcular los bytes por línea
-        this.bytesPerLine = fieldLengths.stream().mapToInt(Integer::intValue).sum();
-
-        // Mostrar bytes por campo en la terminal
-        System.out.println("\nBYTES POR CAMPO / COLUMNA");
-        for (int i = 0; i < fields.size(); i++) {
-            System.out.println(fields.get(i) + ": " + fieldLengths.get(i));
-        }
-        System.out.println();
-
-        // Establece el número de filas
-        this.numRows = this.bytesPerLine > 0 ? this.file.length() / this.bytesPerLine : 0;
-    }
-
-    // Método para obtener el número de filas
-    public long getNumRows() {
-        return numRows;
-    }
-
-    // Método para insertar registros en el archivo
-    public void insertRecord(Map<String, String> data, long position) {
-        try (RandomAccessFile rndFile = new RandomAccessFile(this.file, "rws")) {
-            System.out.println("INSERTANDO REGISTRO EN POSICIÓN: " + position);
-
-            // Posicionarse para escribir
-            rndFile.seek(position * this.bytesPerLine);
-
-            // Escribir cada campo en el archivo
-            for (int i = 0; i < fields.size(); i++) {
-                String field = fields.get(i);
-                int length = fieldLengths.get(i);
-                String fieldValue = data.getOrDefault(field, "");
-
-                // Formatear valor al tamaño requerido
-                String formattedValue = String.format("%1$-" + length + "s", fieldValue);
-
-                System.out.println(field + ": " + formattedValue);
-
-                // Escribir en el archivo
-                rndFile.write(formattedValue.getBytes(StandardCharsets.UTF_8), 0, length);
-            }
-            System.out.println();
-        } catch (IOException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
+        
+        if( f.exists() ){
+            this.numReg = f.length() / this.longReg;
         }
     }
-
-    // Método main para probar la clase
-    public static void main(String[] args) {
-        List<String> fields = List.of("DNI", "NOMBRE", "DIRECCION", "CP");
-        List<Integer> fieldLengths = List.of(9, 32, 32, 5);
-
+    
+    public long getNumReg()
+    {
+        return numReg;
+    }
+    
+    public void insertar( Map<String,String> reg ) throws IOException
+    {
+        insertar( reg, this.numReg++);        
+    }
+    
+    public void insertar( Map<String,String> reg, long pos )
+    {
+        // ABRIR ARCHIVO BINARIO
+        try( RandomAccessFile rndFile = new RandomAccessFile( this.f, "rws" ) ) {
+            
+            // POSICIONARNOS PARA ESCRIBIR
+            rndFile.seek( pos * this.longReg );
+            
+            int total = campos.size();
+            for( int i =0; i<total; i++ )
+            // for( String campo : campos )
+            {
+                // Nombre Columna
+                String nomCampo = campos.get(i);
+                
+                // Tamaño Columna
+                Integer longCampo = camposLength.get(i);
+                
+                // VALOR Columna
+                String valorCampo = reg.get(nomCampo);
+                        
+                if( valorCampo == null )
+                {
+                    valorCampo = "";
+                }
+                
+                String valorCampoForm = String.format("%1$-" + longCampo + "s", valorCampo );
+                
+                System.out.print(valorCampoForm);
+                
+                rndFile.write(valorCampoForm.getBytes("UTF-8"),0, longCampo);
+            }  
+        }
+        catch( Exception ex )
+        {
+            System.err.println("\nError: "+ex.getMessage());
+        }
+    }
+    
+    public static void main(String args[])
+    {
+                
+        List campos = new ArrayList();
+        List camposLength = new ArrayList();
+        
+        campos.add( "DNI" );
+        campos.add( "NOMBRE" );
+        campos.add( "DIRECCION" );
+        campos.add( "CP" );
+        
+        camposLength.add( 9 );
+        camposLength.add( 32 );
+        camposLength.add( 32 );
+        camposLength.add( 5 );
+        
         try {
-            Ejercicio_faa faa = new Ejercicio_faa("C:/Users/kgv17/OneDrive/Escritorio/2º DAM 24-25/ACCESO A DATOS/AccesoDatos/src/Unidad01/Practica08/archivo.txt", fields, fieldLengths);
-            Map<String, String> data = new HashMap<>();
-
-            // Primer registro
-            data.put("DNI", "11111111A");
-            data.put("NOMBRE", "Nombre y Apellidos 1");
-            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            data.put("CP", "543210");
-            faa.insertRecord(data, 0);
-            data.clear();
-
-            // Segundo registro
-            data.put("DNI", "22222222B");
-            data.put("NOMBRE", "Nombre2");
-            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            data.put("CP", "123456");
-            faa.insertRecord(data, 1);
-            data.clear();
-
-            // Tercer registro
-            data.put("DNI", "33333333B");
-            data.put("NOMBRE", "Nombre3");
-            data.put("DIRECCION", "Dirección");
-            data.put("CP", "56789");
-            faa.insertRecord(data, 2);
-        } catch (IOException e) {
-            System.err.println("ERROR: " + e.getMessage());
+            
+            Ejercicio_faa faa = new Ejercicio_faa("src/Unidad01/Practica08/archivo_binario_3.datt", campos, camposLength );
+            
+            Map reg = new HashMap();
+            
+            // PRIMER REGISTRO
+            reg.put("DNI", "11111111A");
+            reg.put("NOMBRE", "Nombre y Apellidos 1");            
+            reg.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+            reg.put("CP", "543210");
+            faa.insertar(reg,10);
+            reg.clear();
+            
+            // SEGUNDO REGISTRO
+            reg.put("DNI", "22222222B");
+            reg.put("NOMBRE", "Nombre2");
+            reg.put("CP", "123456");
+            reg.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+            faa.insertar(reg,9);
+            reg.clear();
+            
+            // TERCER REGISTRO
+            reg.put("DNI", "333333B");
+            reg.put("NOMBRE", "Nombre3");
+            reg.put("CP", "56789");
+            reg.put("DIRECCION", "DIrECCION");
+            faa.insertar(reg,0);
+            reg.clear();
+                        
+            
+        }
+        catch( IOException e )
+        {
+            System.err.print("EXCE" + e.getMessage() );
+        }
+        catch( Exception e )
+        {
+            System.err.print("EXCE" + e.getMessage() );
         }
     }
+        
 }
