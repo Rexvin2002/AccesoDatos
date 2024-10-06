@@ -52,7 +52,9 @@ public class RegistroBinario {
 
     // Método para insertar registros en el archivo
     public void insertRecord(Map<String, String> data, long position) {
+        
         try (RandomAccessFile rndFile = new RandomAccessFile(this.file, "rws")) {
+            
             System.out.println("INSERTANDO REGISTRO EN POSICIÓN: " + position);
 
             // Posicionarse para escribir
