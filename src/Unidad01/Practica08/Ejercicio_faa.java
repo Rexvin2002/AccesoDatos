@@ -22,21 +22,32 @@ public class Ejercicio_faa {
     private long numFilas = 0;    // Número de filas 
     
     public Ejercicio_faa(String path, List<String> campos, List<Integer> bytesCampos) throws IOException {
+        
+        // Crea el archivo
+        this.f = new File(path);
+        if (!this.f.exists()) {
+            this.f.createNewFile();
+        }
+        
         this.campos = campos;
         this.bytesCampos = bytesCampos;
-        this.f = new File(path);
-        this.f.createNewFile();
+        
         this.bytesLinea = 0;
         
         // Muestra los bytes por campo en la terminal
         System.out.println("\nBYTES POR CAMPO / COLUMNA");
+        
+        // Muestra todos los campos con su longitud e incrementa bytesLinea según la longitud de cada campo
         for (int i = 0; i < campos.size(); i++) {
+            
             String campo = campos.get(i);
             int longitud = bytesCampos.get(i);
 
             System.out.print(campo + ": " + longitud + "\n");
-            this.bytesLinea += longitud; // Incrementa bytesLinea según la longitud de cada campo
+            this.bytesLinea += longitud; // 
+            
         }
+        
         System.out.println("\n");
 
         // Establece el número de filas dividiendo el length total del archivo entre el número de bytes por línea
@@ -44,8 +55,6 @@ public class Ejercicio_faa {
             this.numFilas = (int) (f.length() / this.bytesLinea);
         }
     }
-    
-    public long numFilas(){ return numFilas; }
     
     int r = 1;
     
