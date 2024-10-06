@@ -1,0 +1,3 @@
+texto al principio del fichero
+esto es el contenido del archivo
+texto final del fichero
