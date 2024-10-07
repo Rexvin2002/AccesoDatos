@@ -1,118 +1,213 @@
 package Unidad01.Practica08;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
-/**
- * Clase para manejar registros en un archivo binario.
- * 
- * @author kgv17
- */
+import java.io.*;
+import java.util.*;
+
 public class RegistroBinario {
 
-    private final File file;
-    private final List<String> fields;
-    private final List<Integer> fieldLengths;
-    private final long bytesPerLine; // Bytes por línea
-    private final long numRows;      // Número de filas
-    
-    // Constructor
-    public RegistroBinario(String path, List<String> fields, List<Integer> fieldLengths) throws IOException {
-        this.file = new File(path);
-        if (!this.file.exists()) {
-            this.file.createNewFile();
+    private final File f;
+    private final List<String> campos;
+    private final List<Integer> camposLength;
+    private long longReg;
+    private long numReg = 0;
+
+    public RegistroBinario(String path, List<String> campos, List<Integer> camposLength) throws IOException {
+        this.campos = campos;
+        this.camposLength = camposLength;
+
+        this.f = new File(path);
+        if (!f.exists()) {
+            f.createNewFile();
         }
+        this.longReg = 0;
 
-        this.fields = fields;
-        this.fieldLengths = fieldLengths;
-
-        // Calcular los bytes por línea
-        this.bytesPerLine = fieldLengths.stream().mapToInt(Integer::intValue).sum();
-
-        // Mostrar bytes por campo en la terminal
-        System.out.println("\nBYTES POR CAMPO / COLUMNA");
-        for (int i = 0; i < fields.size(); i++) {
-            System.out.println(fields.get(i) + ": " + fieldLengths.get(i));
-        }
         System.out.println();
+        for (int i = 0; i < campos.size(); i++) {
+            String campo = campos.get(i);
+            Integer length = camposLength.get(i);
+            System.out.println(campo + ": " + length);
+            this.longReg += length;
+        }
 
-        // Establece el número de filas
-        this.numRows = this.bytesPerLine > 0 ? this.file.length() / this.bytesPerLine : 0;
-    }
-
-    // Método para obtener el número de filas
-    public long getNumRows() {
-        return numRows;
-    }
-
-    // Método para insertar registros en el archivo
-    public void insertRecord(Map<String, String> data, long position) {
-        
-        try (RandomAccessFile rndFile = new RandomAccessFile(this.file, "rws")) {
-            
-            System.out.println("INSERTANDO REGISTRO EN POSICIÓN: " + position);
-
-            // Posicionarse para escribir
-            rndFile.seek(position * this.bytesPerLine);
-
-            // Escribir cada campo en el archivo
-            for (int i = 0; i < fields.size(); i++) {
-                String field = fields.get(i);
-                int length = fieldLengths.get(i);
-                String fieldValue = data.getOrDefault(field, "");
-
-                // Formatear valor al tamaño requerido
-                String formattedValue = String.format("%1$-" + length + "s", fieldValue);
-
-                System.out.println(field + ": " + formattedValue);
-
-                // Escribir en el archivo
-                rndFile.write(formattedValue.getBytes(StandardCharsets.UTF_8), 0, length);
-            }
-            System.out.println();
-        } catch (IOException ex) {
-            System.err.println("ERROR: " + ex.getMessage());
+        if (f.exists()) {
+            this.numReg = f.length() / this.longReg;
         }
     }
 
-    // Método main para probar la clase
-    public static void main(String[] args) {
-        List<String> fields = List.of("DNI", "NOMBRE", "DIRECCION", "CP");
-        List<Integer> fieldLengths = List.of(9, 32, 32, 5);
+    public long getNumReg() {
+        return numReg;
+    }
 
-        try {
-            RegistroBinario faa = new RegistroBinario("src/Unidad01/Practica08/archivo_binario.dat", fields, fieldLengths);
-            Map<String, String> data = new HashMap<>();
+    public void insertar(Map<String, String> reg, long pos) {
+        try (RandomAccessFile rndFile = new RandomAccessFile(this.f, "rws")) {
+            rndFile.seek(pos * this.longReg);
+            int total = campos.size();
+            System.out.println();
+            for (int i = 0; i < total; i++) {
+                String nomCampo = campos.get(i);
+                Integer longCampo = camposLength.get(i);
+                String valorCampo = reg.get(nomCampo);
 
-            // Primer registro
-            data.put("DNI", "11111111A");
-            data.put("NOMBRE", "Nombre y Apellidos 1");
-            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            data.put("CP", "543210");
-            faa.insertRecord(data, 0);
-            data.clear();
+                if (valorCampo == null) {
+                    valorCampo = "";
+                }
 
-            // Segundo registro
-            data.put("DNI", "22222222B");
-            data.put("NOMBRE", "Nombre2");
-            data.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
-            data.put("CP", "123456");
-            faa.insertRecord(data, 1);
-            data.clear();
+                String valorCampoForm = String.format("%1$-" + longCampo + "s", valorCampo);
+                System.out.println(nomCampo + ": " + valorCampoForm);
+                rndFile.write(valorCampoForm.getBytes("UTF-8"), 0, longCampo);
+            }
 
-            // Tercer registro
-            data.put("DNI", "33333333B");
-            data.put("NOMBRE", "Nombre3");
-            data.put("DIRECCION", "Dirección");
-            data.put("CP", "56789");
-            faa.insertRecord(data, 2);
-        } catch (IOException e) {
-            System.err.println("ERROR: " + e.getMessage());
+        } catch (Exception ex) {
+            System.err.println("\nError: " + ex.getMessage());
+        }
+    }
+
+    public Map<String, String> leer(long pos) {
+        Map<String, String> reg = new HashMap<>();
+        try (RandomAccessFile rndFile = new RandomAccessFile(this.f, "r")) {
+            rndFile.seek(pos * this.longReg);
+            byte[] buffer;
+
+            for (int i = 0; i < campos.size(); i++) {
+                Integer longCampo = camposLength.get(i);
+                buffer = new byte[longCampo];
+                rndFile.read(buffer, 0, longCampo);
+                String valorCampo = new String(buffer, "UTF-8").trim();
+                reg.put(campos.get(i), valorCampo);
+            }
+
+        } catch (Exception ex) {
+            System.err.println("\nError: " + ex.getMessage());
+        }
+        return reg;
+    }
+
+    public void modificar(Map<String, String> reg, long pos) {
+        insertar(reg, pos);
+        System.out.println("\nPosición modificada exitosamente.");
+    }
+
+    public static void main(String[] args) {  
+        try {  
+            System.setOut(new PrintStream(System.out, true, "UTF-8"));
+            Scanner scanner = new Scanner(System.in);
+            List<String> campos = Arrays.asList("DNI", "NOMBRE", "DIRECCION", "CP");
+            List<Integer> camposLength = Arrays.asList(9, 32, 32, 5);
+            
+            try {
+                RegistroBinario faa = new RegistroBinario("src/Unidad01/Practica08/archivo_binario_3.dat", campos, camposLength);
+                
+                Map<String, String> reg = new HashMap<>();
+                
+                // PRIMER REGISTRO
+                reg.put("DNI", "11111111A");
+                reg.put("NOMBRE", "Nombre y Apellidos 1");
+                reg.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+                reg.put("CP", "54321");
+                faa.insertar(reg, 0);
+                reg.clear();
+                
+                // SEGUNDO REGISTRO
+                reg.put("DNI", "22222222B");
+                reg.put("NOMBRE", "Nombre2");
+                reg.put("DIRECCION", "Calle Principal Nº 7, Planta4, Letra J");
+                reg.put("CP", "12345");
+                faa.insertar(reg, 1);
+                reg.clear();
+                
+                // TERCER REGISTRO
+                reg.put("DNI", "33333333C");
+                reg.put("NOMBRE", "Nombre3");
+                reg.put("DIRECCION", "Direccion 3");
+                reg.put("CP", "56789");
+                faa.insertar(reg, 2);
+                reg.clear();
+                
+                while (true) {
+                    System.out.println("\nMenu:");
+                    System.out.println("1. Insertar registro");
+                    System.out.println("2. Leer registro");
+                    System.out.println("3. Modificar registro");
+                    System.out.println("4. Salir");
+                    System.out.print("\nElija una opción: ");
+                    
+                    int opcion = scanner.nextInt();
+                    scanner.nextLine(); // Consumir nueva línea
+                    
+                    switch (opcion) {
+                        case 1 -> {
+                            System.out.print("\nIngrese la posición para insertar: ");
+                            long posInsertar = scanner.nextLong();
+                            scanner.nextLine(); // Consumir nueva línea
+                            
+                            // Verifica si ya existe un registro en la posición especificada
+                            Map<String, String> registroExistente = faa.leer(posInsertar);
+                            
+                            boolean isEmpty = registroExistente != null && registroExistente.values().stream().allMatch(String::isEmpty);
+                            
+                            if (!isEmpty) {
+                                // Informar al usuario que ya hay un registro en esa posición
+                                System.out.println("\nYa existe un registro en la posición " + posInsertar + ":");
+                                registroExistente.forEach((campo, valor) -> System.out.println(campo + ": " + valor));
+                            } else {
+                                System.out.println("\nNo hay ningún registro en la posición " + posInsertar + ", se procederá a crear uno nuevo.");
+                            }
+                            
+                            // Solicitar datos para el nuevo registro
+                            Map<String, String> nuevoRegistro = new HashMap<>();
+                            for (String campo : campos) {
+                                System.out.print("Ingrese " + campo + ": ");
+                                String valor = scanner.nextLine();
+                                nuevoRegistro.put(campo, valor);
+                            }
+                            
+                            // Insertar el registro en la posición especificada (sobreescribiendo si existe)
+                            faa.insertar(nuevoRegistro, posInsertar);
+                            System.out.println("\nRegistro insertado en la posición " + posInsertar + ".");
+                        }
+                        
+                        case 2 -> {
+                            System.out.print("\nIngrese la posición del registro a leer: ");
+                            long posLeer = scanner.nextLong();
+                            scanner.nextLine();
+                            Map<String, String> registroLeido = faa.leer(posLeer);
+                            if (registroLeido != null) {
+                                System.out.println("\nRegistro leído:");
+                                registroLeido.forEach((campo, valor) -> System.out.println(campo + ": " + valor));
+                            } else {
+                                System.out.println("\nNo se encontró un registro en la posición especificada.");
+                            }
+                        }
+                        
+                        case 3 -> {
+                            System.out.print("\nIngrese la posición del registro a modificar: ");
+                            long posModificar = scanner.nextLong();
+                            scanner.nextLine();
+                            Map<String, String> registroModificado = new HashMap<>();
+                            System.out.println();
+                            for (String campo : campos) {
+                                System.out.print("Ingrese " + campo + ": ");
+                                String valor = scanner.nextLine();
+                                registroModificado.put(campo, valor);
+                            }
+                            faa.modificar(registroModificado, posModificar);
+                        }
+                        
+                        case 4 -> {
+                            System.out.println("\nSaliendo...");
+                            return;
+                        }
+
+                        default -> System.out.println("\nOpción no válida.");
+                    }
+                }
+                
+            } catch (IOException e) {
+                System.err.println("\nError: " + e.getMessage());
+            }
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("\nError: " + e.getMessage());
         }
     }
 }
