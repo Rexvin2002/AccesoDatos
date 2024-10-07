@@ -350,12 +350,18 @@ public class AdvancedBinaryRecord {
                             long positionToModify = -1; // Valor inicial para la posición
 
                             while (!validPosition) {
-                                System.out.print("\nEnter the position of the record to modify: ");
+                                System.out.print("\nEnter the position of the record to modify (c to cancel): ");
+                                String input = scanner.nextLine().trim();
+
+                                // Verificar si se ha introducido "c" para cancelar
+                                if (input.equalsIgnoreCase("c")) {
+                                    System.out.println("Cancelling...");
+                                    break; // Volver al menú en lugar de salir del bucle
+                                }
 
                                 // Verificar si se ha introducido un número
-                                if (scanner.hasNextLong()) {
-                                    positionToModify = scanner.nextLong();
-                                    scanner.nextLine(); // Consumir nueva línea
+                                try {
+                                    positionToModify = Long.parseLong(input);
 
                                     // Leer el registro en la posición especificada
                                     Map<String, String> existingRecord = binaryRecord.read(positionToModify);
@@ -368,7 +374,7 @@ public class AdvancedBinaryRecord {
                                         System.out.println();
                                         for (String field : fields) {
                                             System.out.print("Enter new value for " + field + " (leave blank to keep current value): ");
-                                            String value = scanner.nextLine();
+                                            String value = scanner.nextLine().trim();
                                             // Solo se modifica si se proporciona un nuevo valor
                                             if (!value.isEmpty()) {
                                                 modifiedRecord.put(field, value);
@@ -382,12 +388,12 @@ public class AdvancedBinaryRecord {
                                     } else {
                                         System.out.println("\nNo record found at the specified position. Please try again.");
                                     }
-                                } else {
-                                    System.out.println("Invalid input. Please enter a valid position.");
-                                    scanner.nextLine(); // Limpiar la entrada no válida
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Invalid input. Please enter a valid position or 'c' to cancel.");
                                 }
                             }
                         }
+
                         case 4 -> {
                             boolean validInput = false;
                             while (!validInput) {
