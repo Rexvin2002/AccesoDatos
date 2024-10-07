@@ -8,7 +8,7 @@ import java.util.*;
  * Each record consists of multiple fields of specified lengths.
  */
 public class AdvancedBinaryRecord {
-
+    private final Record record;
     private final File file;                      // The binary file to store records.
     private final List<String> fields;            // List of field names.
     private final List<Integer> fieldLengths;     // Corresponding lengths of each field.
@@ -24,6 +24,7 @@ public class AdvancedBinaryRecord {
      * @throws IOException If there is an error creating the file or accessing it.
      */
     public AdvancedBinaryRecord(String path, List<String> fields, List<Integer> fieldLengths) throws IOException {
+        this.record = new Record();
         this.fields = fields;
         this.fieldLengths = fieldLengths;
 
@@ -365,7 +366,8 @@ public class AdvancedBinaryRecord {
                                             continue; // Prompt the user again for the position.
                                         }
                                     } else {
-                                        System.out.println("\nNo record exists at position " + positionToInsert + ", a new one will be created."); // Inform about creating a new record.
+                                        System.out.println("\nThe record at position " + positionToInsert + " is empty.\n"); // Inform about creating a new record.
+                                        System.out.println("Creating record:");
                                     }
 
                                     validPosition = true; // The position is valid.
@@ -453,7 +455,10 @@ public class AdvancedBinaryRecord {
                                     // Read the record at the specified position.
                                     Map<String, String> existingRecord = binaryRecord.read(positionToModify);
 
-                                    if (!existingRecord.isEmpty()) { // Check if the record is not empty.
+                                    // Check if all the fields are empty.
+                                    boolean allFieldsEmpty = existingRecord.values().stream().allMatch(String::isEmpty);
+
+                                    if (!allFieldsEmpty) { // Check if the record is not empty.
                                         // Display the current record at the specified position.
                                         System.out.println("\nCurrent record at position " + positionToModify + ":");
                                         existingRecord.forEach((field, value) -> System.out.println(field + ": " + value));
@@ -478,14 +483,31 @@ public class AdvancedBinaryRecord {
                                         // Modify the existing record with the new values.
                                         binaryRecord.modify(modifiedRecord, positionToModify);
                                         System.out.println("\nRecord at position " + positionToModify + " modified successfully."); // Confirmation message.
+                                        validPosition = true; // Exit the loop after a successful modification.
                                     } else {
-                                        System.out.println("\nNo record found at the specified position. Please try again."); // Inform user no record found.
+                                        System.out.println("\nThe record at the specified position is empty. Please enter new values:"); // Inform user the record is empty.
+
+                                        // Create a new record to modify.
+                                        Map<String, String> modifiedRecord = new HashMap<>();
+
+                                        // Loop through all fields to get new values from the user.
+                                        for (String field : fields) {
+                                            System.out.print("Enter value for " + field + ": ");
+                                            String value = scanner.nextLine().trim(); // Read and trim the input.
+                                            modifiedRecord.put(field, value); // Add the provided value to the record.
+                                        }
+
+                                        // Modify the existing record with the new values.
+                                        binaryRecord.modify(modifiedRecord, positionToModify);
+                                        System.out.println("\nRecord at position " + positionToModify + " created successfully."); // Confirmation message.
+                                        validPosition = true; // Exit the loop after a successful creation.
                                     }
                                 } catch (NumberFormatException e) {
                                     // Handle invalid input.
                                     System.out.println("Invalid input. Please enter a valid position or 'c' to cancel."); // Prompt for valid input.
                                 }
                             }
+
                         }
                         // Select a field
                         case 4 -> {
@@ -507,7 +529,7 @@ public class AdvancedBinaryRecord {
                                     } else {
                                         // Read the record to verify if it exists
                                         Map<String, String> record2 = binaryRecord.read(recordNumber);
-                                        if (record2 == null || record2.isEmpty()) {
+                                        if (record2 == null || record2.isEmpty() || record2.values().stream().allMatch(String::isEmpty)) {
                                             System.out.println("Error: No record found for record number " + recordNumber + ".");
                                         } else {
                                             // Display the number of available columns
@@ -522,7 +544,7 @@ public class AdvancedBinaryRecord {
                                                 // Handle the input to exit
                                                 if (columnName.equalsIgnoreCase("c")) {
                                                     System.out.println("Cancelling column selection...");
-                                                    validInput = false; // Go back to ask for the record number
+
                                                     break; // Exit the column loop
                                                 }
 
@@ -550,6 +572,7 @@ public class AdvancedBinaryRecord {
                                     System.out.println("Error: Please enter a valid number for the record.");
                                 }
                             }
+
 
                         }
                         // Select a column
@@ -595,43 +618,18 @@ public class AdvancedBinaryRecord {
                                 // Show the available columns
                                 System.out.println("\nAvailable columns: " + record2.keySet());
 
-                                // Now ask for the column name
-                                while (true) {
-                                    System.out.print("Enter the column name (or 'c' to cancel): ");
-                                    String columnName = scanner.nextLine().trim(); // Read the column input and remove whitespace
+                                // Process for getting values for all available columns
+                                for (String columnName : record2.keySet()) {
+                                    List<String> values = binaryRecord.selectAllValuesForColumn(columnName); // Change to your corresponding method
 
-                                    // Handle the input to exit
-                                    if (columnName.equalsIgnoreCase("c")) {
-                                        System.out.println("Cancelling...");
-                                        validInput = false; // Make the outer loop ask again
-                                        break;
-                                    }
-
-                                    // Convert the column name to lowercase for comparison
-                                    String normalizedColumnName = columnName.toLowerCase();
-
-                                    // Check if the field exists in the record (ignoring case)
-                                    String actualFieldName = record2.keySet().stream()
-                                        .filter(key -> key.toLowerCase().equals(normalizedColumnName))
-                                        .findFirst()
-                                        .orElse(null);
-
-                                    // Get the values for the specified column
-                                    if (actualFieldName != null) {
-                                        List<String> values = binaryRecord.selectAllValuesForColumn(actualFieldName); // Change to your corresponding method
-
-                                        // Check if values were obtained
-                                        if (values != null && !values.isEmpty()) {
-                                            System.out.println("\nValues for column '" + actualFieldName + "': " + values+"\n");
-                                        } else {
-                                            System.out.println("Error: No values found for column '" + actualFieldName + "'. Please enter a valid column name.\n");
-                                        }
+                                    // Check if values were obtained
+                                    if (values != null && !values.isEmpty()) {
+                                        System.out.println("\nValues for column '" + columnName + "': " + values + "\n");
                                     } else {
-                                        System.out.println("Error: No column found with the name '" + columnName + "'. Please try again.\n");
+                                        System.out.println("Error: No values found for column '" + columnName + "'.\n");
                                     }
                                 }
                             }
-
 
                         }
                         // Select a row as a list
