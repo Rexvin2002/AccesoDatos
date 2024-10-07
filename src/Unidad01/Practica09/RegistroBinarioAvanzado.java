@@ -265,7 +265,7 @@ public class RegistroBinarioAvanzado {
         bytesCampos.add( 5 );
         
         try {
-            RegistroBinarioAvanzado faa = new RegistroBinarioAvanzado("src/Unidad01/Practica08/archivo_binario_3.dat", campos, bytesCampos );
+            RegistroBinarioAvanzado faa = new RegistroBinarioAvanzado("src/Unidad01/Practica08/archivo_binario_2.dat", campos, bytesCampos );
             Map datos = new HashMap();
             
             // PRIMER REGISTRO

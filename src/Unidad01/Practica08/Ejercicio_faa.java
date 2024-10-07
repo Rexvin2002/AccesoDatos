@@ -104,7 +104,7 @@ public class Ejercicio_faa {
         
         try {
             
-            Ejercicio_faa faa = new Ejercicio_faa("file_binario_2.dat", campos, camposLength );
+            Ejercicio_faa faa = new Ejercicio_faa("file_binario_3.dat", campos, camposLength );
             
             Map reg = new HashMap();
             
