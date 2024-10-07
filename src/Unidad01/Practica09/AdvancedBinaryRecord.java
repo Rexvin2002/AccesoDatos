@@ -8,7 +8,6 @@ import java.util.*;
  * Each record consists of multiple fields of specified lengths.
  */
 public class AdvancedBinaryRecord {
-    private final Record record;
     private final File file;                      // The binary file to store records.
     private final List<String> fields;            // List of field names.
     private final List<Integer> fieldLengths;     // Corresponding lengths of each field.
@@ -24,7 +23,6 @@ public class AdvancedBinaryRecord {
      * @throws IOException If there is an error creating the file or accessing it.
      */
     public AdvancedBinaryRecord(String path, List<String> fields, List<Integer> fieldLengths) throws IOException {
-        this.record = new Record();
         this.fields = fields;
         this.fieldLengths = fieldLengths;
 
