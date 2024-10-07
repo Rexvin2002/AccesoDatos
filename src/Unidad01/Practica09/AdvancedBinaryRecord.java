@@ -106,7 +106,6 @@ public class AdvancedBinaryRecord {
      */
     public void modify(Map<String, String> record, long position) {
         insert(record, position); 
-        System.out.println("\nPosition modified successfully."); 
     }
     
     /**
@@ -422,7 +421,6 @@ public class AdvancedBinaryRecord {
                                         // Display the read record.
                                         System.out.println("\nRecord read:");
                                         readRecord.forEach((field, value) -> System.out.println(field + ": " + value)); // Print each field and value.
-                                        validPosition = true; // The position is valid.
                                     } else {
                                         System.out.println("\nThe record at the specified position is empty. Please try again."); // Inform user the record is empty.
                                     }
@@ -480,7 +478,6 @@ public class AdvancedBinaryRecord {
                                         // Modify the existing record with the new values.
                                         binaryRecord.modify(modifiedRecord, positionToModify);
                                         System.out.println("\nRecord at position " + positionToModify + " modified successfully."); // Confirmation message.
-                                        validPosition = true; // The position is valid.
                                     } else {
                                         System.out.println("\nNo record found at the specified position. Please try again."); // Inform user no record found.
                                     }
@@ -541,7 +538,7 @@ public class AdvancedBinaryRecord {
                                                 // Use the selectField method to get the value of the field if it exists
                                                 if (actualFieldName != null) {
                                                     String value = binaryRecord.selectField(recordNumber, actualFieldName);
-                                                    System.out.println("Value for column '" + actualFieldName + "' in record " + recordNumber + ": " + value);
+                                                    System.out.println("\nValue for column '" + actualFieldName + "' in record " + recordNumber + ": " + value);
                                                     validColumnInput = true; // End the loop if a valid value is obtained
                                                 } else {
                                                     System.out.println("Error: No column found with the name '" + columnName + "'. Please try again.\n");
@@ -657,13 +654,12 @@ public class AdvancedBinaryRecord {
 
                                     // Verify if values were obtained
                                     if (rowValues != null && !rowValues.isEmpty()) {
-                                        System.out.println("Row values: " + rowValues);
-                                        break; // Exit the loop if values are obtained
+                                        System.out.println("\nRow values: " + rowValues);
                                     } else {
                                         System.out.println("No values found for record number " + recordNumber + ".");
                                     }
                                 } catch (NumberFormatException e) {
-                                    System.out.println("Error: Please enter a valid integer for the record number.");
+                                    System.out.println("Error: Please enter a valid integer for the record number.\n");
                                 }
                             }
                         }
@@ -685,12 +681,11 @@ public class AdvancedBinaryRecord {
                                     int recordNumber = Integer.parseInt(input); // Convert to an integer
                                     Map<String, String> rowMap = binaryRecord.selectRowMap(recordNumber); // Get the map of the record
 
-                                    if (!rowMap.isEmpty()) { // Check if the map is not empty
-                                        System.out.println("Row map: " + rowMap);
+                                    if (rowMap != null && !rowMap.isEmpty()) { // Check if the map is not null and not empty
+                                        System.out.println("\nRow map: " + rowMap);
                                     } else {
                                         System.out.println("No record found for number " + recordNumber + "."); // Message if the record is not found
                                     }
-                                    break; // Exit the loop after showing the map
                                 } catch (NumberFormatException e) {
                                     System.out.println("Invalid input. Please enter a valid record number or 'c' to cancel.");
                                 }
@@ -732,7 +727,7 @@ public class AdvancedBinaryRecord {
                                     if (updateChoice.equals("y")) {
                                         // Update all fields
                                         for (String key : existingRecord.keySet()) {
-                                            System.out.print("\nEnter new value for field '" + key + "' (current value: " + existingRecord.get(key) + "): ");
+                                            System.out.print("Enter new value for field '" + key + "' (current value: " + existingRecord.get(key) + "): ");
                                             String newValue = scanner.nextLine().trim();
                                             existingRecord.put(key, newValue); // Update the value in the map
                                         }
@@ -773,7 +768,6 @@ public class AdvancedBinaryRecord {
                                             System.out.println("Failed to update the record due to field name mismatch.");
                                         }
                                     }
-                                    break; // Exit the loop after updating the record
                                 } catch (NumberFormatException e) {
                                     System.out.println("Invalid input. Please enter a valid record position or 'c' to cancel.");
                                 }
@@ -799,7 +793,6 @@ public class AdvancedBinaryRecord {
                                     int row = Integer.parseInt(input); // Convert to an integer
                                     binaryRecord.delete(row); // Delete the record
                                     System.out.println("Record deleted.");
-                                    break; // Exit the loop after deleting the record
                                 } catch (NumberFormatException e) {
                                     System.out.println("Invalid input. Please enter a valid record position or 'c' to cancel.");
                                 }
