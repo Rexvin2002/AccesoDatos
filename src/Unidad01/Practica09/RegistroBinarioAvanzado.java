@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Ejercicio_faa_Avanzado {
+public class RegistroBinarioAvanzado {
 
     private final File f;
     private final List<String> campos;
@@ -21,7 +21,7 @@ public class Ejercicio_faa_Avanzado {
     private long bytesLinea;       // Bytes por linea
     private long numFilas = 0;    // Número de filas 
     
-    public Ejercicio_faa_Avanzado(String path, List<String> campos, List<Integer> bytesCampos) throws IOException {
+    public RegistroBinarioAvanzado(String path, List<String> campos, List<Integer> bytesCampos) throws IOException {
         this.campos = campos;
         this.bytesCampos = bytesCampos;
         this.f = new File(path);
@@ -265,7 +265,7 @@ public class Ejercicio_faa_Avanzado {
         bytesCampos.add( 5 );
         
         try {
-            Ejercicio_faa_Avanzado faa = new Ejercicio_faa_Avanzado("file_binario_2.dat", campos, bytesCampos );
+            RegistroBinarioAvanzado faa = new RegistroBinarioAvanzado("src/Unidad01/Practica08/archivo_binario_3.dat", campos, bytesCampos );
             Map datos = new HashMap();
             
             // PRIMER REGISTRO
