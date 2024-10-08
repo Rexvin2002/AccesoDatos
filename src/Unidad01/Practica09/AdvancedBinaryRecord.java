@@ -67,7 +67,7 @@ public class AdvancedBinaryRecord {
 
                 // Format the field value to fit the specified length.
                 String formattedFieldValue = String.format("%1$-" + fieldLength + "s", fieldValue);
-                rndFile.write(formattedFieldValue.getBytes("UTF-8"), 0, fieldLength); // Write the formatted field value to the file.
+                rndFile.write(formattedFieldValue.getBytes("UTF-8"), 0, fieldLength*2); // Write the formatted field value to the file.
             }
         } catch (Exception ex) {
             System.err.println("\nError: " + ex.getMessage());
@@ -260,7 +260,7 @@ public class AdvancedBinaryRecord {
             List<Integer> fieldLengths = Arrays.asList(9, 32, 32, 5);
 
             try {
-                AdvancedBinaryRecord binaryRecord = new AdvancedBinaryRecord("src/Unidad01/Practica08/binary_file_1.dat", fields, fieldLengths);
+                AdvancedBinaryRecord binaryRecord = new AdvancedBinaryRecord("src/Unidad01/Practica09/binary_file_1.dat", fields, fieldLengths);
 
                 Map<String, String> record = new HashMap<>();
 
