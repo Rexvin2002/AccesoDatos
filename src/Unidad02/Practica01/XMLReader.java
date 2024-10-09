@@ -1,5 +1,5 @@
 
-package Unidad01.Practica10;
+package Unidad02.Practica01;
 
 import java.io.File;
 import java.io.PrintStream;
