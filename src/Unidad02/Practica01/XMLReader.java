@@ -32,17 +32,17 @@ public class XMLReader {
         ps.print("<" + doc.getNodeName());
 
         // Imprimir atributos del nodo si los tiene
-        NamedNodeMap atributos = doc.getAttributes();   // Obtiene los atributos del 
-        if (atributos != null) {
+        NamedNodeMap atributos = doc.getAttributes();   // Obtiene los atributos de cada nodo
+        if (atributos != null) {    // Si tiene atributo los imprime sino no
             for (int i = 0; i < atributos.getLength(); i++) {
-                Node attr = atributos.item(i);
-                ps.print(" " + attr.getNodeName() + "=\"" + attr.getNodeValue() + "\"");
+                Node attr = atributos.item(i); // Coje el atributo en cuestión
+                ps.print(" " + attr.getNodeName() + "=\"" + attr.getNodeValue() + "\"");  // Imprime horizontalmente el nombre del nodo junto su valor
             }
         }
 
         // Obtener y procesar hijos de los nodos
-        NodeList children = doc.getChildNodes();
-        if (children.getLength() == 0) {
+        NodeList children = doc.getChildNodes();    // Obtiene el numero de hijos total a partir del nodo del documento
+        if (children.getLength() == 0) {    // Si el nodo no tiene hijos se cierra
             ps.println("/>");
         } else {
             ps.println(">");
@@ -57,7 +57,7 @@ public class XMLReader {
                         ps.println(content);
                     }
                 } else {
-                    muestraNodo(child, level + 1, ps);  // Llamada recursiva para otros nodos
+                    muestraNodo(child, level + 1, ps);  // Si el nodo no tiene texto de pasa al siguiente
                 }
             }
             for (int i = 0; i < level; i++) {
