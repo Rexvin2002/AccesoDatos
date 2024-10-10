@@ -79,12 +79,14 @@ public class XMLReader {
     }
     
     public static void main( String [] args){
+        /*
         if (args.length == 0) {
             System.err.println("Debe proporcionar el nombre del archivo XML como argumento.");
             return;
         }
 
         String nomFich = args[0];
+        */
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringComments(true);
@@ -92,7 +94,7 @@ public class XMLReader {
 
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new File(nomFich));
+            Document doc = db.parse(new File("src/Unidad02/Practica01/BOOKS.xml"));
             muestraNodo(doc, 0, System.out);
         } catch (FileNotFoundException | ParserConfigurationException | SAXException ex) {
             System.out.println(ex.getMessage());
