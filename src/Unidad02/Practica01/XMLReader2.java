@@ -21,7 +21,9 @@ import org.xml.sax.SAXException;
 public class XMLReader2 {
     
     public static void muestraNodo ( Node nodo, int level, PrintStream ps ){
-        String n = nodo.getNodeName();
+        
+        
+        String n = nodo.getNodeValue();
         System.out.println(n);
     }
     

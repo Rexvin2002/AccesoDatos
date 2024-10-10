@@ -21,20 +21,18 @@ import org.xml.sax.SAXException;
  * @author kgv17
  */
 public class XMLReader {
-
-    private static final String INDENT_CHAR = " ";
     
-    public static void muestraNodo ( Node nodo, int level, PrintStream ps ){
-        // Indentar el contenido según el nivel
+    public static void muestraNodo ( Node doc, int level, PrintStream ps ){
+        // Indentar según el nivel
         for (int i = 0; i < level; i++) {
-            ps.print(INDENT_CHAR);
+            ps.print("  ");
         }
 
         // Imprimir el nombre del nodo
-        ps.print("<" + nodo.getNodeName());
+        ps.print("<" + doc.getNodeName());
 
-        // Si el nodo tiene atributos, los imprimimos
-        NamedNodeMap atributos = nodo.getAttributes();
+        // Imprimir atributos del nodo si los tiene
+        NamedNodeMap atributos = doc.getAttributes();   // Obtiene los atributos del 
         if (atributos != null) {
             for (int i = 0; i < atributos.getLength(); i++) {
                 Node attr = atributos.item(i);
@@ -42,38 +40,30 @@ public class XMLReader {
             }
         }
 
-        // Obtener el contenido del nodo y sus hijos
-        NodeList children = nodo.getChildNodes();
+        // Obtener y procesar hijos de los nodos
+        NodeList children = doc.getChildNodes();
         if (children.getLength() == 0) {
-            // Si el nodo no tiene hijos, cerramos la etiqueta en la misma línea
             ps.println("/>");
         } else {
             ps.println(">");
-
-            // Recorremos los hijos del nodo
             for (int i = 0; i < children.getLength(); i++) {
                 Node child = children.item(i);
-
-                // Si el hijo es un nodo de texto, imprimimos su contenido
                 if (child.getNodeType() == Node.TEXT_NODE) {
                     String content = child.getNodeValue().trim();
                     if (!content.isEmpty()) {
                         for (int j = 0; j < level + 1; j++) {
-                            ps.print(INDENT_CHAR);
+                            ps.print("  ");
                         }
                         ps.println(content);
                     }
                 } else {
-                    // Si es un nodo de otro tipo, lo mostramos recursivamente
-                    muestraNodo(child, level + 1, ps);
+                    muestraNodo(child, level + 1, ps);  // Llamada recursiva para otros nodos
                 }
             }
-
-            // Indentamos y cerramos la etiqueta
             for (int i = 0; i < level; i++) {
-                ps.print(INDENT_CHAR);
+                ps.print("  ");
             }
-            ps.println("</" + nodo.getNodeName() + ">");
+            ps.println("</" + doc.getNodeName() + ">");
         }
         
     }
