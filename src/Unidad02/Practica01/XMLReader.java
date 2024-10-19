@@ -23,7 +23,8 @@ import org.xml.sax.SAXException;
 public class XMLReader {
     
     public static void muestraNodo ( Node doc, int level, PrintStream ps ){
-        // Representa el TAB para cambiar de nivel
+        
+        // Introduce un numero de TAB según el nivel
         for (int i = 0; i < level; i++) {   ps.print("  ");  }
 
         // Imprime el nombre del nodo
@@ -42,7 +43,8 @@ public class XMLReader {
             
         }
 
-        // Obtiene el numero de hijos total a partir del nodo del documento, si tiene, los procesa sino, el nodo se cierra y si el nodo no tiene texto de pasa al siguiente
+        // Obtiene el numero de hijos total a partir del nodo del documento, si tiene, 
+        // los procesa sino, el nodo se cierra y si el nodo no tiene texto de pasa al siguiente
         NodeList children = doc.getChildNodes();  
         if (children.getLength() == 0) {  
             
@@ -80,16 +82,16 @@ public class XMLReader {
     }
     
     public static void main( String [] args){
-        /*
+        
         if (args.length == 0) {
             System.err.println("Debe proporcionar el nombre del archivo XML como argumento.");
             return;
         }
 
         String nomFich = args[0];
-        */
         
-        String ruta = "src/Unidad02/Practica01/BOOKS.xml";
+        
+        // String ruta = "src/Unidad02/Practica01/BOOKS.xml";
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setIgnoringComments(true);
@@ -98,7 +100,7 @@ public class XMLReader {
         try {
             
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new File(ruta));
+            Document doc = db.parse(new File("src/Unidad02/Practica01/BOOKS.xml"));
             muestraNodo(doc, 0, System.out);
             
         } catch (FileNotFoundException | ParserConfigurationException | SAXException ex) {
