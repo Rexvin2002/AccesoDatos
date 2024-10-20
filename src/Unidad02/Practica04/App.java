@@ -31,12 +31,11 @@ public class App {
                 String query = "SELECT * FROM users"; 
                 ResultSet rs = stmt.executeQuery(query);
                 
-                // Procesar el resultado
+                // Procesa cada uno de los resultados
                 while (rs.next()) {
                     
                     System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name"));
                 }
-                
                 
                 // Cierra los recursos
                 rs.close();
