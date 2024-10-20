@@ -11,9 +11,9 @@ public class App {
     public static void main(String[] args) {
 
         // Información de la base de datos
-        String url = "jdbc:mysql://localhost:3306/testdb";  // Cambia "testdb" por el nombre de tu base de datos
-        String user = "root";  // Cambia "root" por tu usuario de MySQL
-        String password = "passwd";  // Cambia "your_password" por tu contraseña de MySQL
+        String url = "jdbc:mysql://localhost:3306/testdb";
+        String user = "root";
+        String password = "passwd";
 
         // Cargar el DRIVER MYSQL manualmente
         // NO ES NECESARIO DESDE JAVA SE 6
@@ -34,8 +34,10 @@ public class App {
                 
                 // Procesar el resultado
                 while (rs.next()) {
+                    
                     System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name"));
                 }
+                
                 
                 // Cerrar los recursos
                 rs.close();
@@ -43,7 +45,11 @@ public class App {
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println("Error: " + ex.getMessage());
+            
+            System.err.println("Error: " + ex.getMessage());
+            
         }
+        
     }
+    
 }
