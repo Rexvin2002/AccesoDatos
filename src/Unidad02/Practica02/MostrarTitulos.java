@@ -15,14 +15,13 @@ import org.xml.sax.SAXException;
  *
  * @author kgv17
  */
-public class MostrarTitulos {
-
-    
+public class MostrarTitulos {  
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
         try {
             // Crear DocumentBuilder para leer el XML
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
