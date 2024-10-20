@@ -3,6 +3,7 @@ package Unidad02.Practica04;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class App {
@@ -20,28 +21,28 @@ public class App {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver loaded successfully!");
 
-            // Establecer la conexión
-            Connection conn = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection established successfully!");
-
-            // Crear una sentencia SQL
-            Statement stmt = conn.createStatement();
-
-            // Ejecutar una consulta SQL
-            String query = "SELECT * FROM users";  // Cambia "users" por el nombre de tu tabla
-            ResultSet rs = stmt.executeQuery(query);
-
-            // Procesar el resultado
-            while (rs.next()) {
-                System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name"));
+            try ( // Establecer la conexión
+                    Connection conn = DriverManager.getConnection(url, user, password)) {
+                System.out.println("Connection established successfully!");
+                
+                // Crear una sentencia SQL
+                Statement stmt = conn.createStatement();
+                
+                // Ejecutar una consulta SQL
+                String query = "SELECT * FROM users";  // Cambia "users" por el nombre de tu tabla
+                ResultSet rs = stmt.executeQuery(query);
+                
+                // Procesar el resultado
+                while (rs.next()) {
+                    System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name"));
+                }
+                
+                // Cerrar los recursos
+                rs.close();
+                stmt.close();
             }
 
-            // Cerrar los recursos
-            rs.close();
-            stmt.close();
-            conn.close();
-
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             System.out.println("Error: " + ex.getMessage());
         }
     }
