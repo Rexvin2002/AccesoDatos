@@ -14,22 +14,21 @@ public class App {
         String url = "jdbc:mysql://localhost:3306/testdb";
         String user = "root";
         String password = "passwd";
-
-        // Cargar el DRIVER MYSQL manualmente
-        // NO ES NECESARIO DESDE JAVA SE 6
+        
         try {
+            // Carga el DRIVER MYSQL manualmente
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Driver loaded successfully!");
 
             try ( // Establecer la conexión
-                    Connection conn = DriverManager.getConnection(url, user, password)) {
+                Connection conn = DriverManager.getConnection(url, user, password)) {
                 System.out.println("Connection established successfully!");
                 
                 // Crear una sentencia SQL
                 Statement stmt = conn.createStatement();
                 
                 // Ejecutar una consulta SQL
-                String query = "SELECT * FROM users";  // Cambia "users" por el nombre de tu tabla
+                String query = "SELECT * FROM users"; 
                 ResultSet rs = stmt.executeQuery(query);
                 
                 // Procesar el resultado
@@ -39,7 +38,7 @@ public class App {
                 }
                 
                 
-                // Cerrar los recursos
+                // Cierra los recursos
                 rs.close();
                 stmt.close();
             }
