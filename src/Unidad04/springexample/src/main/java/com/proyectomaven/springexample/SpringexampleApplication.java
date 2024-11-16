@@ -50,6 +50,9 @@ public class SpringexampleApplication implements CommandLineRunner{
         logger.info("\n\n\n--- Listado de todos los clientes ---");
         List<Cliente> todos = clienteRepository.findAll();
         todos.forEach(cliente -> logger.info("Cliente: {} {}", cliente.getNombre(), cliente.getApellido()));
+        
+        // Finalizar la aplicación
+        // System.exit(0);
     }
 
 }
