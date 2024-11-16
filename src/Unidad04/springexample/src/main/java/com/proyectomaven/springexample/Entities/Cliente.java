@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "clientes")
-public class Clientes {
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,10 @@ public class Clientes {
     private String direccion;
 
     // Constructor vacío
-    public Clientes() {}
+    public Cliente() {}
 
     // Constructor con parámetros
-    public Clientes(String nombre, String apellido, String direccion) {
+    public Cliente(String nombre, String apellido, String direccion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
