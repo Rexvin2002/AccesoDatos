@@ -10,9 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
 public class SpringexampleApplication implements CommandLineRunner{
+
+    private static final Logger logger = LoggerFactory.getLogger(SpringexampleApplication.class);
 
     @Autowired
     private RepositorioClientes clienteRepository;
@@ -31,28 +35,21 @@ public class SpringexampleApplication implements CommandLineRunner{
         // ESCRITURA EN BBDD
         Cliente cl1 = new Cliente("Pepe", "García", "Calle Mayor 1");
         Cliente cl2 = new Cliente("Juan", "López", "Calle Menor 2");
-
-        // Guardar uno a uno
         clienteRepository.save(cl1);
         clienteRepository.save(cl2);
 
-        // Guardar varios juntos
         Cliente cl3 = new Cliente("Ana", "Martínez", "Plaza España 3");
         Cliente cl4 = new Cliente("María", "Sánchez", "Avenida Libertad 4");
         clienteRepository.saveAll(List.of(cl3, cl4));
 
         // LECTURAS DE BASE DE DATOS
-        System.out.println("\n--- Búsqueda por ID ---");
+        logger.info("\n\n\n--- Búsqueda por ID ---");
         Optional<Cliente> optionalClient = clienteRepository.findById(1L);
-        optionalClient.ifPresent(cliente -> 
-            System.out.println("Cliente encontrado: " + cliente.getNombre())
-        );
+        optionalClient.ifPresent(cliente -> logger.info("Cliente encontrado: {}", cliente.getNombre()));
 
-        System.out.println("\n--- Listado de todos los clientes ---");
+        logger.info("\n\n\n--- Listado de todos los clientes ---");
         List<Cliente> todos = clienteRepository.findAll();
-        todos.forEach(cliente -> 
-            System.out.println("Cliente: " + cliente.getNombre() + " " + cliente.getApellido())
-        );
+        todos.forEach(cliente -> logger.info("Cliente: {} {}", cliente.getNombre(), cliente.getApellido()));
     }
 
 }
