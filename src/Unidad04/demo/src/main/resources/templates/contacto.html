@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Contacto</title>
+</head>
+<body>
+    <h1>Contacto</h1>
+    <p>Mensaje: <span th:text="${mensaje}">Mensaje</span></p>
+    <p>Email: <a th:href="'mailto:' + ${email}" th:text="${email}">Correo electrónico</a></p>
+    <p>Teléfono: <span th:text="${telefono}">Teléfono</span></p>
+</body>
+</html>
