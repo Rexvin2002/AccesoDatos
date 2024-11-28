@@ -1,0 +1,28 @@
+<!-- templates/productos.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Productos</title>
+</head>
+<body>
+    <h1>Catálogo de Productos</h1>
+    
+    <!-- Mostrar producto destacado -->
+    <div class="producto-destacado">
+        <h2>Producto Destacado</h2>
+        <p>ID: <span th:text="${productoDestacado.id}"></span></p>
+        <p>Concepto: <span th:text="${productoDestacado.concepto}"></span></p>
+        <p>Precio: <span th:text="${productoDestacado.importe}">€</span></p>
+    </div>
+
+    <!-- Lista de todos los productos -->
+    <h2>Todos los Productos</h2>
+    <div class="productos-lista">
+        <div th:each="producto : ${productos}" class="producto-item">
+            <h3 th:text="${producto.concepto}"></h3>
+            <p>ID: <span th:text="${producto.id}"></span></p>
+            <p>Precio: <span th:text="${producto.importe}">€</span></p>
+        </div>
+    </div>
+</body>
+</html>
