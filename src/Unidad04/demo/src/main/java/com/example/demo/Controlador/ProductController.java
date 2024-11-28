@@ -1,7 +1,7 @@
-package com.example.demo.Controllers;
+package com.example.demo.Controlador;
 
-// Controlador REST para endpoints API
-
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,21 +13,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-class ApiProductController {
+public class ProductController {
 
-    // Respuesta JSON
-    @GetMapping("/users")
+    @GetMapping("users")
     public Map<String, Object> pruebas() {
+        // JSON
         Map<String, Object> body = new HashMap<>();
         body.put("title", "titulo hola mundo");
         body.put("nombre", "nombre");
         body.put("apellidos", "apellidos");
+
         return body;
+
+        // CASERO
+        // return "{ user : "pepe" }";
     }
 
-    // Crear recurso temporal (prueba)
-    @PostMapping("/create")
+    @PostMapping("create")
     public String postMethodName(@RequestBody String entity) {
+        try {
+            File.createTempFile("asda", "adsasd");
+
+        } catch (IOException ex) {
+        }
         return entity.replace("Gomez", "Gómez");
     }
 }

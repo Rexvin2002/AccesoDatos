@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Pedidos</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lista de Pedidos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Total</th> <!-- Nueva columna para mostrar el total -->
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pedido : ${pedidos}">
+                <td th:text="${pedido.id}"></td>
+                <td th:text="${pedido.fecha}"></td>
+                <td th:text="${pedido.cliente.nombre}"></td>
+                <td th:text="${pedido.total + ' €'}"></td> <!-- Mostrando el total del pedido -->
+                <td>
+                    <!-- Botón para ver el detalle del pedido -->
+                    <button type="button"
+                        th:onclick="'window.location.href=\'/pedidos/detallePedido/' + ${pedido.id} + '\';'">Ver Detalle</button>
+                    <!-- Botón para eliminar el pedido -->
+                    <button type="button"
+                        th:onclick="'window.location.href=\'/pedidos/delete/' + ${pedido.id} + '\';'">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="button" onclick="window.location.href='/pedidos/add'">Añadir Pedido</button>
+    <button type="button" onclick="window.location.href='/'">Volver</button>
+</body>
+
+</html>

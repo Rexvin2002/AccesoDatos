@@ -1,0 +1,39 @@
+
+body {
+    background-color: black;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: top; /* Centrar horizontalmente */
+    align-items: top;    /* Centrar verticalmente */
+    height: 100%;
+    
+}
+
+div:nth-child(1) {
+    width: 100%;
+    background-color: rgb(46, 41, 41);
+    text-align: center;
+}
+
+div:nth-child(1) h1 {
+    font-size: 40pt;
+}
+
+div:nth-child(2){
+    background-color: rgba(0, 0, 255, 0.37);
+    text-align: center;
+    padding: 25px;
+    
+}
+
+footer {
+    background-color: rgb(46, 41, 41);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+

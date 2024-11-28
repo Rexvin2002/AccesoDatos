@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.thymeleaf.org">
 <head>
-    <title th:text="${title}">Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Document</title>
 </head>
-<body>
-    <h1>Bienvenido</h1>
-    <p>Nombre: <span th:text="${nombre}">Nombre</span></p>
-    <p>Apellido: <span th:text="${apellido}">Apellido</span></p>
+<body>    
+    <h1 th:text="${title}"> TEXTO  </h1>
+    <h2 th:text="${nombre}"></h2>
+    <h3 th:text="${apellido}"></h3>
 </body>
 </html>
