@@ -13,17 +13,25 @@ import com.proyectomaven.springexample.Entities.Pedidos;
 
 @Repository
 public interface PedidosRepository extends JpaRepository<Pedidos, Long> {
-    // Find orders by client
-    @Query("SELECT p FROM Pedidos p WHERE p.cliente.id = :clientId")
-    List<Pedidos> findPedidosByCliente(@Param("clientId") Long clientId);
+    @Query("SELECT p FROM Pedidos p WHERE p.cliente.id = :clienteId")
+    List<Pedidos> findByClienteId(@Param("clienteId") Long clienteId);
 
-    // Find orders within date range
+    @Query("SELECT p FROM Pedidos p WHERE p.fechaPedido = :fechaPedido")
+    List<Pedidos> findByFechaPedido(@Param("fechaPedido") LocalDate fechaPedido);
+
+    @Query("SELECT p FROM Pedidos p WHERE p.total > :total")
+    List<Pedidos> findByTotalGreaterThan(@Param("total") BigDecimal total);
+
+    @Query("SELECT p FROM Pedidos p WHERE p.producto.id = :productoId")
+    List<Pedidos> findByProductoId(@Param("productoId") Long productoId);
+
+    @Query("SELECT COUNT(p) FROM Pedidos p WHERE p.cliente.id = :clienteId")
+    long countByClienteId(@Param("clienteId") Long clienteId);
+
+    @Query("SELECT SUM(p.total) FROM Pedidos p WHERE p.cliente.id = :clienteId")
+    BigDecimal sumTotalByClienteId(@Param("clienteId") Long clienteId);
+
     @Query("SELECT p FROM Pedidos p WHERE p.fechaPedido BETWEEN :startDate AND :endDate")
-    List<Pedidos> findPedidosByDateRange(
-            @Param("startDate") LocalDate startDate,
+    List<Pedidos> findByFechaPedidoBetween(@Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
-
-    // Calculate total sales for a specific product
-    @Query("SELECT SUM(p.total) FROM Pedidos p WHERE p.producto.id = :productoId")
-    BigDecimal calculateTotalSalesByProduct(@Param("productoId") Long productoId);
 }

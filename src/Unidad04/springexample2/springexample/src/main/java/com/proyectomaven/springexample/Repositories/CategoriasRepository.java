@@ -8,15 +8,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.proyectomaven.springexample.Entities.Categorias;
-import com.proyectomaven.springexample.Entities.Productos;
 
 @Repository
 public interface CategoriasRepository extends JpaRepository<Categorias, Long> {
-    // Find categories by product
-    @Query("SELECT c FROM Categorias c JOIN c.productos p WHERE p.id = :productoId")
-    List<Categorias> findCategoriasByProducto(@Param("productoId") Long productoId);
+    @Query("SELECT c FROM Categorias c WHERE c.nombre = :nombre")
+    Categorias findByNombre(@Param("nombre") String nombre);
 
-    // Find products in a specific category
-    @Query("SELECT p FROM Productos p JOIN p.categorias c WHERE c.id = :categoriaId")
-    List<Productos> findProductosByCategoria(@Param("categoriaId") Long categoriaId);
+    @Query("SELECT c FROM Categorias c WHERE c.nombre LIKE %:nombre%")
+    List<Categorias> findByNombreContaining(@Param("nombre") String nombre);
+
+    @Query("SELECT c FROM Categorias c JOIN FETCH c.productos")
+    List<Categorias> findAllWithProductos();
+
+    @Query("SELECT c FROM Categorias c JOIN c.productos p WHERE p.id = :productoId")
+    List<Categorias> findByProductoId(@Param("productoId") Long productoId);
+
+    @Query("SELECT COUNT(c) FROM Categorias c WHERE c.nombre = :nombre")
+    long countByNombre(@Param("nombre") String nombre);
+
 }

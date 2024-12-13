@@ -4,31 +4,35 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.proyectomaven.springexample.Entities.Productos;
 
 @Repository
 public interface ProductosRepository extends JpaRepository<Productos, Long> {
-    // Custom query to find products by price range
-    @Query("SELECT p FROM Productos p WHERE p.precio BETWEEN :minPrice AND :maxPrice")
-    List<Productos> findProductosByPriceRange(
-            @Param("minPrice") BigDecimal minPrice,
-            @Param("maxPrice") BigDecimal maxPrice);
+        // Obtener productos por nombre
+        @Query("SELECT p FROM Productos p WHERE p.nombre LIKE %:nombre%")
+        List<Productos> findByNombre(@Param("nombre") String nombre);
 
-    // Native query to find low stock products
-    @Query(value = "SELECT * FROM productos WHERE stock < :threshold", nativeQuery = true)
-    List<Productos> findLowStockProducts(@Param("threshold") Integer threshold);
+        // Obtener productos por precio mayor que un valor dado
+        @Query("SELECT p FROM Productos p WHERE p.precio > :precio")
+        List<Productos> findByPrecioGreaterThan(@Param("precio") BigDecimal precio);
 
-    // Modify product price
-    @Modifying
-    @Transactional
-    @Query("UPDATE Productos p SET p.precio = :newPrice WHERE p.id = :productId")
-    int updateProductPrice(
-            @Param("productId") Long productId,
-            @Param("newPrice") BigDecimal newPrice);
+        // Obtener productos por precio menor que un valor dado
+        @Query("SELECT p FROM Productos p WHERE p.precio < :precio")
+        List<Productos> findByPrecioLessThan(@Param("precio") BigDecimal precio);
+
+        // Obtener productos por stock disponible mayor que un valor
+        @Query("SELECT p FROM Productos p WHERE p.stock > :stock")
+        List<Productos> findByStockGreaterThan(@Param("stock") Integer stock);
+
+        // Obtener el total del stock de todos los productos
+        @Query("SELECT SUM(p.stock) FROM Productos p")
+        Integer sumTotalStock();
+
+        // Contar productos por nombre
+        @Query("SELECT COUNT(p) FROM Productos p WHERE p.nombre = :nombre")
+        long countByNombre(@Param("nombre") String nombre);
 }
