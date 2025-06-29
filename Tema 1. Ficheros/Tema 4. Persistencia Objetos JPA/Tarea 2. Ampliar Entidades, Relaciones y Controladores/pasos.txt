@@ -1,0 +1,100 @@
+PASOS A SEGUIR:
+[Sobre lo ya realizado en la tarea 1 ampliamos]
+
+PASO 1. Entidades.
+
+Agregar varias entidades a nuestro proyecto. Pensar en el Proyecto Final.
+
+PASO 2. Relaciones entre Entidades. 
+
+       Crearemos relaciones de todos los tipos posibles entre nuestras entidades.
+
+       La manera de modelar las relaciones entre Entidades será una de las siguiente:
+
+          - Relaciones 1-a-Muchos. OJO a la anotaciones y sus opciones
+
+                @OneToMany
+
+                Dentro de la EntidadUno añadimos un atributo List<EntidadMuchos> o Set <EntidadMuchos>
+
+                @ManyToOne
+
+                 Dentro de EntidadMuchos añadimos un atributo simple EntidadUno.
+
+           - Relaciones Muchos-a-Muchos. 
+
+                 Usaremos anotación @ManyToMany en este tipo de atributo.
+
+                 Se procede como en el caso @OneToMany, se pueden crear atributos List<> o Set<> en ambas Entidades si se desea.
+
+                 Para que se actualicen en cascada se puede utilizar la siguiente anotación escogiendo el tiempo de cascada.
+
+                 @ManyToMany)
+
+           - Relaciones One-To-One
+
+                 Usaremos anotación @OneToOne en este tipo de atributo.
+
+                 Lo habitual es crear atributos cruzados entre las dos Entidades que forman la relación.
+
+                 Habrá que crear Seters/Geters para estos nuevos atributos-relación también.
+
+           - Configuraciones Adicionales para las anotaciones que nos permiten configurar las relaciones:
+
+                  @OneToMany( fetch = FetchType.LAZY, FetchType.EAGER )
+
+                           Retrasar la carga de los datos (LAZY) o hacerla junto al objeto (EAGER).
+
+                  @OneToMany( cascade = { CascadeType.ALL, CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REMOVE, CascadeType.DETACH } )
+
+                           Establece como se gestiona la relación. Persist (guardado), Merge(Actualización), Remove(eliminacion),
+
+                  @ManyToOne
+
+                  @JoinColumn( name = "campo_relacion", nullable = false )
+
+                           Establece el nombre del campo para la relación, y no puede ser nulo.
+
+                 @ManyToOne
+
+                 @JoinTable( name= "tabla_intemedia",
+
+                                     joincolumns= @JoinColumn(name="id_alumno" ),
+
+                                     InverseJoincolumns= @JoinColumn(name="id_curso" ), 
+
+                                     constraints = @UniqueConstraint( columnNames= {"id_curso", "id_alumno"}
+
+                 )
+
+                           Establece manualmente el nombre de la tabla y los campo que crean la relación.
+
+                           Además agregamos restricciones UNIQUE a la relación.
+
+PASO 3. Controladores. Para cada entidad incluir su controlador "POR DEFECTO" y además crearemos nuestros primeros métodos personalizados, donde establecemos una consulta SQL para ejecutarse creada por nosotros.
+
+SELECT @Query (nativa SQL o con parámetros con nombre)
+
+@Query(value = "SELECT * FROM users WHERE age > ?1", nativeQuery = true)
+
+List<User> findUsersOlderThanAge(int age);
+
+// Con parámetros con nombre 
+
+@Query("SELECT u FROM User u WHERE u.status = :status AND u.name = :name")
+
+List<User> findByStatusAndName(@Param("status") String status, @Param("name") String name);
+
+UPDATE / DELETE @Modifying + @Query
+
+@Modifying
+
+@Query("UPDATE User u SET u.status = :status WHERE u.name = :name")
+
+int updateUserSetStatusForName(@Param("status") String status, @Param("name") String name);
+
+@Modifying
+
+@Query("DELETE FROM User u WHERE u.status = :status")
+
+void deleteUsersByStatus(@Param("status") String status);

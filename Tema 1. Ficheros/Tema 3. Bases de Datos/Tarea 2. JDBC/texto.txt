@@ -1,0 +1,39 @@
+Sobre el ejemplo de la tarea 1, realizamos unos ajustes:
+
+Para poder identificar los registros AÑADIMOS las siguientes mejoras:
+
+1) Añadir AutoIncrement PK ID en MySQL a la tabla.
+
+2) Ampliamos la base de datos con una nueva tabla "licencias" con los siguientes campos:
+
+          - ID integer // Apunta al registro de la tabla USUARIOS
+
+          - TIPO varchar(2) // Ejemplos.- A1, B1, B2, E1
+
+          - EXPEDICION datetime
+
+          - CADUCIDAD datetime
+
+3) Utilizar PreparedStatement en los TODOS los statement.
+
+4) Utilizar Transacciones (Bloque de Operaciones JUNTAS).
+
+      ++  connection.setAutoCommit( false );  // Antes de hacer las operaciones
+
+      ++  connection.commit( false );  // Cuando finalicemos de hacer todas las operaciones
+
+      ++ rollBack();   // Cuando hubo errores
+
+5) Ampliar los métodos con un par de métodos nuevos que necesiten acceder a ambas tablas:
+
+       bool insertLicencias( string DNI, string DIRECCION, string CP, string NOMBRE, ArrayList<ArrayList> licencias ); // Permite INSERTAR 1 USUARIO + VARIAS LICENCIAS con 1 llamada
+
+       bool eliminarLicencias( string DNI ); // Elimina todas las Licencias de un DNI concreto
+
+6) Comprobar que todos las EXCEPCIONES POSIBLES se gestionan correctamente:
+
+        SQLException
+
+        Exception
+
+        Exception al RollBack que se ejecutará dentro de un try catch

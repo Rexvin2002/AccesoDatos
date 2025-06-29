@@ -1,8 +1,0 @@
-¿Qué es una REST API?
-¿Qué es un END POINT?
-¿Qué métodos HTTP se utilizan en una REST API?
-Propón una automatización en MAKE utilizando 2/3 servicios: 
-https://www.make.com/en/integrations?community=1&verified=1
-Instala POSTMAN en tu equipo
-Realiza varias llamadas a los END POINT de https://dog.ceo/ y adjunta las capturas.
-Conclusiones: Realiza una conclusión de lo que has aprendido en la práctica.

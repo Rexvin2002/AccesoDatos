@@ -1,0 +1,52 @@
+En esta práctica vamos a modificar los controladores de las entidades mediante JPQL.
+
+public interface CriteriaBuilder
+Used to construct criteria queries, compound selections, expressions, predicates, orderings.
+ 
+public interface CriteriaQuery<T> extends AbstractQuery<T>
+The CriteriaQuery interface defines functionality that is specific to top-level queries. (SELECT, FROM, WHERE)
+Añadir nuevos métodos para buscar (Find) en los controladores de Departamentos, Proyectos y Empleados usando 
+
+            * Varios OR, AND, LIKE mezclados para filtrar por varios valores de diferentes campos que reciba el método.
+
+            * ORDER BY  Que se ordenen los resultados por un campo que se pase al método.           
+
+            * greaterThan y currentDate() juntos para comparar con fechas.
+
+            * selectCase() [Opcional mayor complejidad]
+
+            * Sum() y groupBy( ) [Opcional mayor complejidad]
+
+Como ejemplo de base este código:
+
+
+    private List<Departamento> findDepartamentoEntities(boolean all, int maxResults, int firstResult) {
+        EntityManager em = getEntityManager();
+        try {
+            
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery cq = cb.createQuery();
+                        
+            Root<Departamento> depRoot = cq.from( Departamento.class );
+            Predicate pred1 = cb.like( depRoot.get("nomDepto"), "%K%");
+            Predicate pred2 = cb.like( depRoot.get("nomDepto"), "%J%");
+            Predicate pred3 = cb.and( pred1, pred2 );
+            
+            cq.select( depRoot );
+            cq.where( pred3 );
+            
+            // cq.select( depRoot ).where( pred3 );
+            
+            // cq.orderBy( depRoot.get("nomDepto") );
+            
+            Query q = em.createQuery(cq);
+            
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
+        } finally {
+            em.close();
+        }
+    }

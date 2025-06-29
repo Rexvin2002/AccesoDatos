@@ -1,0 +1,43 @@
+Utiliza un fichero XML de ejemplo y realiza un programa con la ayuda de las siguientes clases/métodos para escribir documentos XML:
+
+   - DocumentoBuilderFactory.newInstance()
+
+   - DocumentoBuilderFactory.newDocumentBuilder()
+
+   - DOMImplementation
+
+   - DOMImplementation.createDocument()
+
+   - Document.setXmlVersion
+
+   - Document.setXmlStandalone
+
+   - Document.createElement
+
+   - Document.appendChild
+
+   - DOMSource
+
+   - TransformerFactory.newInstance()
+
+   - StreamRecult
+
+   - Transformer.transform( DOMSource, StreamResult )
+
+1- Muestra por pantalla una lista de títulos de sus libros
+
+2- Traduce todas las etiquetas del XML y guardarlo en un fichero llamado libros.xml
+
+* Catalog > Catalogo
+
+* Book > Libro
+
+* Title > Titulo
+
+* Genre > Genero
+
+* Price > Precio
+
+* Public_date > Fecha de publicación
+
+* Description > Descripción

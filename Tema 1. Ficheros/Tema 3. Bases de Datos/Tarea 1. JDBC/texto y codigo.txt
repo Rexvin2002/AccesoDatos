@@ -1,0 +1,65 @@
+Sobre el ejemplo siguiente (tarea de Ficheros con Acceso Aleatorio), realizamos una nueva versión/ampliación del programa Java que ahora incluya los siguientes métodos accediendo a Base de Datos MySQL (tabla agenda por ejemplo):
+
+1) Método string selectCampo( int numRegistro, string nomColumna), devuelve el campo correspondiente a la columna de nombre nomColumna del registro indicado en numRegistro.
+
+2) Método List<String> selectColumna( string nomColumna ) Devuelve una lista con TODOS los valores del campo buscado. (SELECT columna FROM fichero).
+
+3) Método List<String> selectRowList( in numRegistro ) Devuelve una lista con los datos del registro de la posición numRegistro. (SELECT CAMPOS FROM fichero WHERE ... )
+
+4) Método Map selectRowMap( in numRegistro ) Igual resultado que el anterior pero en una clase HashMap.
+
+5.1) Método update( int row, Map ) Modifica en el fichero todos los campos para el registro indicado en row que se reciben en un Map<string campo,string valor>
+
+5.2) Método update( int row, string campo, string valor ) Modifica SOLO el valor del campo "campo" para el registro indicado en row.
+
+6) Método delete( int row ) limpia los datos del registro indicado.
+
+ 
+
+// Para algunas bases de datos hay que hacer SET GLOBAL time_zone = '+1:00';
+
+import java.sql.*;
+
+public class JDBC1 {
+
+    public static void main(String[] args) {
+
+        // Class.forName("com.mysql.cj.jdbc.Driver");   // Cargar el driver manualmente NO ES NECESARIO desde Java SE 6
+
+        try ( Connection conexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/TuBaseDatos", "root", "tu_password") ) {
+
+            System.out.println( "CONECTANDO");
+
+            // Se obtiene una conexión con la base de datos.
+
+            System.out.println( "CREANDO STATEMENT...");            
+
+            // Se crea un Statement, para realizar la consulta
+
+            Statement s = conexion.createStatement();            
+
+            System.out.println( "OBTENIENDO RESULT SET");
+
+            // Se realiza la consulta. Los resultados se guardan en el ResultSet rs
+
+            ResultSet rs = s.executeQuery("select DNI, DIRECCION, NOMBRE. CP from fichero");
+
+            // Se recorre el ResultSet, mostrando por pantalla los resultados.
+
+            while (rs.next()) 
+
+            {
+
+                System.out.println( rs.getString(0) + " " + rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) );
+
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("error " + e.getMessage());
+
+        }
+
+    } // end main
+
+} // end class
