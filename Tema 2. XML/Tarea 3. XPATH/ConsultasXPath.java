@@ -1,6 +1,10 @@
 
 package Unidad02.Practica03;
 
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -16,10 +20,6 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 
-/**
- *
- * @author kgv17
- */
 public class ConsultasXPath {
 
     /**

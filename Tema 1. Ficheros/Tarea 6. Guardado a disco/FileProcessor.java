@@ -1,5 +1,9 @@
 package Unidad01.Practica06;
 
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.io.*;
 import java.util.Scanner;
 

@@ -1,14 +1,16 @@
 /**
  * Kevin Gómez Valderas           2ºDAM
- *
- * Esta clase permite mostrar detalles de archivos y directorios, listar los contenidos de un directorio
- * y calcular el tamaño total de un directorio de manera recursiva.
  */
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+/**
+ * Esta clase permite mostrar detalles de archivos y directorios, listar los contenidos de un directorio
+ * y calcular el tamaño total de un directorio de manera recursiva.
+ */
 
 public class FileClass {
 

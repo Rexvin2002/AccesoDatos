@@ -1,87 +1,78 @@
-# JDBC Utilities - README
+# README - JDBC Database Manager
 
-## Descripción
-Este proyecto contiene dos clases Java para trabajar con bases de datos MySQL:
-1. **JDBC1**: Clase utilitaria avanzada para operaciones CRUD en tablas
+## 📝 Descripción
+Aplicación Java para gestión de bases de datos MySQL mediante JDBC. Incluye dos clases principales:
+1. **JDBC1**: Clase completa para operaciones CRUD con manejo automático de creación de base de datos/tabla
 2. **App**: Ejemplo básico de conexión y consulta a MySQL
 
-## JDBC1 - Clase Avanzada
+## 🔧 Características principales (JDBC1)
+- **Auto-creación** de base de datos y tabla si no existen
+- **Operaciones CRUD** completas:
+  - Selección de campos, columnas y filas
+  - Actualizaciones (parciales y completas)
+  - Eliminación de registros
+- **Múltiples formatos de retorno**:
+  - Valores individuales
+  - Listas
+  - Mapas clave-valor
+- **Manejo seguro** de conexiones
 
-### Características principales
-- Conexión automatizada a MySQL
-- Operaciones CRUD completas
-- Métodos para consultas específicas
-- Uso de PreparedStatement para seguridad
-- Cierre automático de recursos
-
-### Métodos disponibles
-
-| Método | Descripción | Ejemplo |
-|--------|-------------|---------|
-| `selectField()` | Obtiene un campo específico | `jdbc.selectField(0, "nombre")` |
-| `selectColumn()` | Obtiene todos los valores de una columna | `jdbc.selectColumn("email")` |
-| `selectRowList()` | Obtiene una fila como List | `jdbc.selectRowList(2)` |
-| `selectRowMap()` | Obtiene una fila como Map | `jdbc.selectRowMap(2)` |
-| `update()` | Actualiza uno o varios campos | `jdbc.update(1, "nombre", "Juan")` |
-| `delete()` | Elimina un registro | `jdbc.delete(3)` |
-
-### Ejemplo de uso
+## 🛠️ Uso básico (JDBC1)
 ```java
-JDBC1 jdbc = new JDBC1("mi_bd", "usuario", "contraseña");
+// 1. Crear instancia (auto-crea DB si no existe)
+JDBC1 jdbc = new JDBC1("testdb", "root", "password");
 
-// Consultar datos
-System.out.println(jdbc.selectField(0, "nombre"));
-System.out.println(jdbc.selectColumn("email"));
+// 2. Operaciones de consulta
+String nombre = jdbc.selectField(0, "NOMBRE");
+List<String> direcciones = jdbc.selectColumn("DIRECCION");
 
-// Actualizar datos
-Map<String, String> datos = new HashMap<>();
-datos.put("nombre", "Ana");
-datos.put("email", "ana@example.com");
-jdbc.update(1, datos);
+// 3. Operaciones de modificación
+Map<String, String> updates = new HashMap<>();
+updates.put("NOMBRE", "Nuevo Nombre");
+jdbc.update(1, updates);
 
+// 4. Cerrar conexión
 jdbc.closeConnection();
 ```
 
-## App - Ejemplo Básico
+## ⚙️ Requisitos
+- Java JDK 8+
+- MySQL Server
+- Driver JDBC para MySQL (com.mysql.cj.jdbc.Driver)
+- Credenciales de acceso a MySQL
 
-### Características
-- Demostración simple de conexión JDBC
-- Consulta básica a una tabla
-- Manejo de excepciones
-- Cierre adecuado de recursos
+## 👨‍💻 Autor
+Kevin Gómez Valderas
 
-### Ejemplo de conexión
-```java
-String url = "jdbc:mysql://localhost:3306/testdb";
-String user = "root";
-String password = "passwd";
-
-Connection conn = DriverManager.getConnection(url, user, password);
-Statement stmt = conn.createStatement();
-ResultSet rs = stmt.executeQuery("SELECT * FROM usuarios");
-
-while(rs.next()) {
-    System.out.println(rs.getString("nombre"));
-}
+## 💡 Estructura de la tabla
+La clase JDBC1 trabaja con una tabla llamada `agenda` con estructura:
+```sql
+CREATE TABLE agenda (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    NOMBRE VARCHAR(100),
+    DIRECCION VARCHAR(200)
+)
 ```
 
-## Requisitos
-- Java 8+
-- MySQL Server
-- Connector/J (mysql-connector-java)
-- Tablas: `agenda` y `users`
+## 📌 Dependencias
+- mysql-connector-java (para conexión con MySQL)
+- JDBC API estándar de Java
 
-## Configuración
-1. Importar el proyecto en tu IDE
-2. Añadir el conector MySQL al classpath
-3. Modificar credenciales en los constructores
-4. Ejecutar App.java o JDBC1.java
+## 🛡️ Manejo de errores
+- SQLException en todas las operaciones
+- Validación de existencia de DB/tabla
+- Cierre seguro de recursos
 
-## Mejoras posibles
-- Añadir pool de conexiones
-- Implementar transacciones
-- Soporte para otros motores de BD
-- Logging más detallado
+## Ejemplo App.java
+Clase de demostración con conexión básica:
+```java
+// Conexión simple
+Connection conn = DriverManager.getConnection(url, user, pass);
+Statement stmt = conn.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM users");
 
-## Autor
-Kevin Gómez Valderas
+// Procesar resultados
+while(rs.next()) {
+    System.out.println(rs.getInt("id") + ": " + rs.getString("name"));
+}
+```

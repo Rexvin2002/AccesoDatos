@@ -1,3 +1,8 @@
+
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

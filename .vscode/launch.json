@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SpringexampleApplication",
+            "request": "launch",
+            "mainClass": "SpringexampleApplication",
+            "projectName": "AccesoDatos_365c1423"
+        },
+        {
+            "type": "java",
             "name": "App",
             "request": "launch",
             "mainClass": "App",

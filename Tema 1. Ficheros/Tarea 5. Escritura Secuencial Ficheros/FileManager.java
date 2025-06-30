@@ -1,11 +1,14 @@
 package Unidad01.Practica05;
 
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
  * Programa que permite crear y modificar archivos de texto.
  */
 public class FileManager {

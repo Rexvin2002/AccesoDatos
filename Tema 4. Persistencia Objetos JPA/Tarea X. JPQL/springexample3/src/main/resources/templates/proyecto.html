@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Proyecto</title>
+</head>
+<body>
+    <h1>Editar Proyecto</h1>
+    <form id="edit-proyecto-form">
+        <input type="hidden" id="proyecto-id">
+        
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        
+        <label for="fechaInicio">Fecha de Inicio:</label><br>
+        <input type="date" id="fechaInicio" name="fechaInicio" required><br><br>
+
+        <label for="presupuesto">Presupuesto:</label><br>
+        <input type="number" id="presupuesto" name="presupuesto" required><br><br>
+
+        <label for="estado">Estado:</label><br>
+        <select id="estado" name="estado" required>
+            <option value="Iniciado">Iniciado</option>
+            <option value="En Progreso">En Progreso</option>
+            <option value="Finalizado">Finalizado</option>
+        </select><br><br>
+
+        <button type="submit">Actualizar Proyecto</button>
+    </form>
+
+    <script>
+        // Cargar el proyecto para editarlo
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            fetch(`/api/proyectos/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('proyecto-id').value = data.id;
+                    document.getElementById('nombre').value = data.nombre;
+                    document.getElementById('fechaInicio').value = data.fechaInicio;
+                    document.getElementById('presupuesto').value = data.presupuesto;
+                    document.getElementById('estado').value = data.estado;
+                });
+        };
+
+        // Enviar los datos para actualizar el proyecto
+        document.getElementById('edit-proyecto-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const proyecto = {
+                nombre: document.getElementById('nombre').value,
+                fechaInicio: document.getElementById('fechaInicio').value,
+                presupuesto: document.getElementById('presupuesto').value,
+                estado: document.getElementById('estado').value
+            };
+            
+            const id = document.getElementById('proyecto-id').value;
+            
+            fetch(`/api/proyectos/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(proyecto)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Proyecto actualizado con éxito');
+                window.location.href = '/index.html';
+            })
+            .catch(error => {
+                alert('Error al actualizar el proyecto');
+            });
+        });
+    </script>
+</body>
+</html>

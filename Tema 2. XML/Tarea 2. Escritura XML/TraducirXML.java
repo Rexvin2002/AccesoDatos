@@ -1,6 +1,10 @@
 
 package Unidad02.Practica02;
 
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -18,10 +22,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-/**
- *
- * @author kgv17
- */
 public class TraducirXML {
 
     /**

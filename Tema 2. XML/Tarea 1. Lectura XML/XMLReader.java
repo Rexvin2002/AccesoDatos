@@ -1,6 +1,10 @@
 
 package Unidad01.Practica10;
 
+/**
+ * Kevin Gómez Valderas           2ºDAM
+ */
+
 import java.io.File;
 import java.io.PrintStream;
 import java.io.FileNotFoundException;
@@ -16,10 +20,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
-/**
- *
- * @author kgv17
- */
 public class XMLReader {
 
     private static final String INDENT_CHAR = " ";

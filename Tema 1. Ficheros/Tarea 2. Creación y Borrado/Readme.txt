@@ -1,25 +1,25 @@
-Utilizando los métodos de la clase java.io.File, el propósito de la práctica es crear la siguiente estructura de directorios desde un programa Java mediante unos bucles.
+# README - CreationAndDeletion
 
-Tras crear la estructura hay que recorrer recursivamente buscando un fichero y eliminarlo.
+## Descripción
+Esta clase Java permite crear una estructura de directorios y archivos que representan una familia ficticia, y proporciona funcionalidad para eliminar archivos específicos solicitados por el usuario.
 
-TIP 1 > Preguntar al usuario el nombre del fichero a borrar ( consola o args[] ).
+## Características
+- Crea automáticamente una estructura jerárquica de directorios que simula una familia (Abuelo, Abuela, Padre, Madre, hijos)
+- Genera archivos de texto que representan a los miembros de la familia
+- Permite al usuario eliminar archivos específicos mediante la consola
+- Implementa búsqueda recursiva para localizar y eliminar archivos en cualquier nivel de la estructura
+- Incluye manejo de errores para operaciones de E/S
 
-/ Abuelo / Padre / Hijo1.txt
+## Uso
+1. Compilar el archivo `CreationAndDeletion.java`
+2. Ejecutar el programa
+3. El programa creará automáticamente la estructura de directorios
+4. Introducir el nombre del archivo a borrar cuando se solicite (ej. "Hijo1.txt")
+5. Para salir del programa, introducir "1"
 
-/ Abuelo / Padre / Hija2.txt
+## Requisitos
+- Java JDK 8 o superior
+- Permisos de escritura en el directorio de ejecución
 
-/ Abuelo / Madre / Hijo3.txt
-
-/ Abuelo / Madre / Hija4.txt
-
-/ Abuela / Padre / Hijo5.txt
-
-/ Abuela / Padre / Hija6.txt
-
-/ Abuela / Madre / Hijo7.txt
-
-/ Abuela / Madre / Hija8.txt
-
-TIP 2 > El listado de métodos disponibles ( mkdir, delete, createNewFile ) está en la ayuda de Java:
-
-https://docs.oracle.com/javase/8/docs/api/index.html?java/io/File.html
+## Autor
+Kevin Gómez Valderas 

@@ -1,21 +1,57 @@
-Realiza un programa que convierta ficheros indicándole 4 parámetros:
+# README - FileConverter
 
-         Path fichero de entrada
-         Enconding de entrada
-         Path fichero de salida (debe crearse)
-         Enconding de salida
-Se podrán elegir los siguientes encodings:
+## Descripción
+Herramienta Java para conversión de codificación de archivos de texto entre diferentes formatos de caracteres. Permite transformar archivos entre codificaciones comunes como ASCII, UTF-8, UTF-16 e ISO-8859-1.
 
-- ASCII, UTF-8, UTF-16, ISO-8859-1
+## Características principales
+- **Conversión entre codificaciones** soportadas:
+  - ASCII
+  - UTF-8
+  - UTF-16
+  - ISO-8859-1
+- **Modo de ejecución por línea de comandos**
+- **Validación automática** de parámetros y codificaciones
+- **Manejo robusto de errores** con mensajes descriptivos
+- **Eficiente procesamiento** línea por línea
 
-Utilizando las siguientes clases para leer:
+## Uso
+Compilar y ejecutar desde la línea de comandos:
 
-- InputStreamReader, BufferedReader
+```bash
+# Compilación (desde el directorio src)
+javac Unidad01/Practica07/FileConverter.java
 
-Utilizando las siguientes clases para escribir:
+# Ejecución
+java Unidad01.Practica07.FileConverter <inputPath> <inputEncoding> <outputPath> <outputEncoding>
+```
 
-- BufferedWriter, OutputStreamWriter, FileOutputStream
+### Parámetros requeridos:
+1. `<inputPath>` - Ruta completa del archivo de entrada
+2. `<inputEncoding>` - Codificación del archivo de entrada (ASCII/UTF-8/UTF-16/ISO-8859-1)
+3. `<outputPath>` - Ruta completa del archivo de salida
+4. `<outputEncoding>` - Codificación deseada para el archivo de salida
 
-Capturando las excepciones siguientes:
+### Ejemplo práctico:
+```bash
+java Unidad01.Practica07.FileConverter C:\datos\entrada.txt ASCII C:\datos\salida.txt UTF-8
+```
 
-- FileNotFoundException, IOException, Exception
+## Requisitos
+- Java JDK 8 o superior
+- Permisos de lectura/escritura en las rutas especificadas
+
+## Manejo de errores
+El programa detecta y reporta:
+- Número incorrecto de argumentos
+- Codificaciones no soportadas
+- Archivos de entrada no encontrados
+- Problemas de permisos o E/S
+
+## Autor
+Kevin Gómez Valderas
+
+## Notas técnicas
+- Utiliza `try-with-resources` para manejo automático de recursos
+- Implementa buffers para mejor rendimiento con archivos grandes
+- Conserva los saltos de línea originales
+- Compatible con múltiples plataformas (Windows/Linux/Mac)

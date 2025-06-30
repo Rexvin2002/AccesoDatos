@@ -1,134 +1,44 @@
-# JDBC Database Manager - README
+# README - Sistema de Gestión de Licencias con JDBC
 
-## Descripción
-Este proyecto contiene una clase Java (`JDBC1`) para gestionar bases de datos MySQL con enfoque en usuarios y licencias, además de una clase de demostración básica (`App`).
+## 📝 Descripción
+Aplicación Java para gestión de usuarios y licencias mediante JDBC con MySQL. Incluye dos componentes principales:
+1. **JDBC1**: Clase completa para operaciones CRUD con transacciones y relaciones entre tablas
+2. **App**: Ejemplo básico de conexión y consulta a MySQL
 
-## JDBC1 - Clase Avanzada
+## 🔧 Características principales (JDBC1)
+- **Gestión transaccional** con commit/rollback
+- **Relación 1:N** entre usuarios y licencias
+- **Operaciones avanzadas**:
+  - Inserción de usuario con múltiples licencias en una transacción
+  - Eliminación en cascada de licencias
+  - Consultas con PreparedStatement seguras
+- **Modelo de datos mejorado**:
+  - Tabla usuarios con DNI único
+  - Tabla licencias con fechas y tipos
+  - Integridad referencial con claves foráneas
 
-### Características principales
-- Gestión de tablas relacionadas (usuarios-licencias)
-- Transacciones ACID con commit/rollback manual
-- Operaciones CRUD completas
-- Inserción de múltiples registros relacionados
-- Eliminación en cascada automática
-- Consultas avanzadas con diferentes formatos de resultado
-
-### Métodos principales
-
-#### Gestión de tablas
+## 🛠️ Uso básico (JDBC1)
 ```java
-public void createTables() throws SQLException
-```
-Crea las tablas usuarios y licencias con sus relaciones.
+// 1. Crear instancia y tablas
+JDBC1 jdbc = new JDBC1("testdb", "root", "password");
+jdbc.createTables();
 
-#### Operaciones con usuarios
-```java
-public boolean insertLicencias(String DNI, String DIRECCION, String CP, String NOMBRE,
-                             ArrayList<ArrayList<String>> licencias)
-```
-Inserta un usuario con sus licencias asociadas en una transacción.
+// 2. Insertar usuario con licencias
+ArrayList<ArrayList<String>> licencias = new ArrayList<>();
+ArrayList<String> licencia = new ArrayList<>();
+licencia.add("B1"); licencia.add("2023-01-01"); licencia.add("2025-01-01");
+licencias.add(licencia);
 
-```java
-public boolean cleanUserByDNI(String DNI) throws SQLException
-```
-Elimina un usuario por DNI (incluye licencias por cascada).
+jdbc.insertLicencias("12345678A", "Calle Falsa 123", "28000", "John Doe", licencias);
 
-#### Operaciones con licencias
-```java
-public boolean eliminarLicencias(String DNI)
-```
-Elimina todas las licencias de un usuario.
+// 3. Eliminar licencias por DNI
+jdbc.eliminarLicencias("12345678A");
 
-#### Consultas de datos
-```java
-public String selectCampo(int numRegistro, String nomColumna)
-public List<String> selectColumna(String nomColumna)
-public List<String> selectRowList(int numRegistro)
-public Map<String, String> selectRowMap(int numRegistro)
-```
-Diferentes métodos para recuperar datos en varios formatos.
-
-### Ejemplo de uso
-```java
-try {
-    JDBC1 db = new JDBC1("testdb", "root", "password");
-    db.createTables();
-    
-    // Insertar usuario con licencias
-    ArrayList<ArrayList<String>> licencias = new ArrayList<>();
-    ArrayList<String> licencia = new ArrayList<>();
-    licencia.add("B1");
-    licencia.add("2023-01-01");
-    licencia.add("2025-01-01");
-    licencias.add(licencia);
-    
-    db.insertLicencias("12345678A", "Calle Principal", "28001", "Juan Pérez", licencias);
-    
-    // Consultar datos
-    Map<String, String> usuario = db.selectRowMap(0);
-    System.out.println("Usuario: " + usuario.get("NOMBRE"));
-    
-    db.closeConnection();
-} catch (SQLException e) {
-    System.err.println("Error de base de datos: " + e.getMessage());
-}
+// 4. Cerrar conexión
+jdbc.closeConnection();
 ```
 
-## App - Ejemplo Básico
-
-### Características
-- Conexión básica a MySQL
-- Ejemplo de consulta simple
-- Manejo de recursos con try-with-resources
-- Carga explícita del driver JDBC
-
-### Código de ejemplo
-```java
-public class App {
-    public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/testdb";
-        String user = "root";
-        String password = "passwd";
-        
-        try {
-            // Cargar driver MySQL
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver cargado correctamente");
-            
-            // Establecer conexión
-            try (Connection conn = DriverManager.getConnection(url, user, password);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT * FROM users")) {
-                
-                System.out.println("Conexión establecida");
-                
-                // Procesar resultados
-                while (rs.next()) {
-                    System.out.println("ID: " + rs.getInt("id") + 
-                                     ", Nombre: " + rs.getString("name"));
-                }
-            }
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println("Error: " + e.getMessage());
-        }
-    }
-}
-```
-
-## Requisitos
-- Java 11 o superior
-- MySQL Server 8.0+
-- Connector/J 8.0+
-- Tablas: `usuarios` y `licencias` (se crean automáticamente)
-
-## Configuración
-1. Importar el proyecto en tu IDE
-2. Añadir mysql-connector-java al classpath
-3. Configurar credenciales en los constructores
-4. Ejecutar App.java para prueba básica o JDBC1.java para funcionalidad avanzada
-
-## Estructura de la base de datos
-Las tablas se crean con este esquema:
+## ⚙️ Estructura de la base de datos
 ```sql
 CREATE TABLE usuarios (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -147,10 +57,31 @@ CREATE TABLE licencias (
 );
 ```
 
-## Buenas prácticas implementadas
-- Uso de PreparedStatement para evitar inyección SQL
-- Transacciones atómicas
-- Gestión adecuada de recursos
-- Tipado fuerte de resultados
-- Manejo completo de excepciones
-- Separación clara de responsabilidades
+## 👨‍💻 Autor
+Kevin Gómez Valderas
+
+## 📌 Requisitos
+- Java JDK 11+
+- MySQL Server 8+
+- Driver JDBC para MySQL (com.mysql.cj.jdbc.Driver)
+- Credenciales de acceso a MySQL
+
+## 💡 Mejoras implementadas
+- **PreparedStatement** para evitar SQL injection
+- **Transacciones** para operaciones atómicas
+- **TRY-WITH-RESOURCES** para manejo automático de recursos
+- **Integridad referencial** con ON DELETE CASCADE
+- **Manejo de errores** con rollback automático
+
+## Ejemplo App.java
+```java
+// Conexión simple con try-with-resources
+try (Connection conn = DriverManager.getConnection(url, user, pass);
+     Statement stmt = conn.createStatement();
+     ResultSet rs = stmt.executeQuery("SELECT * FROM users")) {
+     
+    while(rs.next()) {
+        System.out.println(rs.getInt("id") + ": " + rs.getString("name"));
+    }
+}
+```

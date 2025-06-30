@@ -1,44 +1,28 @@
-Completa este ejemplo utilizando el mayor número de métodos de la clase java.io.File, el propósito de la práctica es mostrar en pantalla la información disponible de un fichero mediante un programa Java.
+# README - FileClass  
 
-El listado de métodos disponibles está en la ayuda de Java:
+## Descripción  
+Esta clase permite mostrar detalles de archivos y directorios, listar los contenidos de un directorio y calcular el tamaño total de un directorio de manera recursiva.  
 
-https://docs.oracle.com/javase/8/docs/api/index.html?java/io/File.html
+## Características  
+- **Detalles de archivos/directorios**: Muestra información como tipo, nombre, ruta absoluta/relativa, tamaño, permisos y fecha de última modificación.  
+- **Listado recursivo de directorios**: Permite explorar el contenido de un directorio y sus subdirectorios.  
+- **Cálculo de tamaño**: Calcula el tamaño total de un directorio, incluyendo todos sus archivos y subdirectorios.  
+- **Interacción con el usuario**: Solicita una ruta de archivo/directorio o acepta argumentos por línea de comandos.  
 
-package javaapplication3;
+## Uso  
+1. **Ejecución desde línea de comandos**:  
+   ```bash  
+   java FileClass [ruta]  
+   ```  
+   Donde `[ruta]` es opcional. Si no se proporciona, el programa pedirá una ruta al usuario.  
 
-import java.io.File;
+2. **Interfaz interactiva**:  
+   - Introduce una ruta de archivo o directorio para ver sus detalles.  
+   - Presiona `1` para salir del programa.  
 
-public class JavaApplication3 {
+## Requisitos  
+- **Java JDK**: Se requiere Java (versión 8 o superior) instalado.  
+- **Sistema operativo**: Compatible con cualquier sistema que soporte Java.  
 
-    public static void main(String[] args)
-    {
-        
-        String ruta = "/media";
-        if( args.length > 0 ) ruta = args[0];
-        
-        File fich = new File( ruta );
-        
-        if( !fich.exists() )
-        {
-            System.out.println("No existe el fichero o direcotio" + ruta );
-        }
-        else
-        {
-            if( fich.isFile() )
-            {
-                System.out.println(ruta+" es un fichero.");
-            }
-            else
-            {
-                System.out.println(" " + ruta + " es un directorio. Contenidos:");
-                File[] ficheros = fich.listFiles();
-                for( File f: ficheros )
-                {
-                    String texto = f.isDirectory() ? "/" : f.isFile() ? "_":"?";
-
-                    System.out.println(texto + " " + f.getName() );
-                }
-            }
-        }       
-    }   
-}
+## Autor  
+Kevin Gómez Valderas - 2ºDAM

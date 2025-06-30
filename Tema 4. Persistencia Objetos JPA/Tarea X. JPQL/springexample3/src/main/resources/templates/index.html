@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos</title>
+</head>
+<body>
+    <h1>Lista de Proyectos</h1>
+    <ul id="proyectos-list"></ul>
+    <button onclick="createProyectoForm()">Crear Proyecto</button>
+
+    <script>
+        // Cargar los proyectos al cargar la página
+        window.onload = function() {
+            fetch('/api/proyectos')
+                .then(response => response.json())
+                .then(data => {
+                    const proyectosList = document.getElementById('proyectos-list');
+                    proyectosList.innerHTML = '';
+                    data.forEach(proyecto => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `${proyecto.nombre} - ${proyecto.estado} 
+                        <button onclick="viewProyecto(${proyecto.id})">Ver</button>
+                        <button onclick="deleteProyecto(${proyecto.id})">Eliminar</button>`;
+                        proyectosList.appendChild(li);
+                    });
+                });
+        };
+
+        // Ver los detalles de un proyecto
+        function viewProyecto(id) {
+            window.location.href = `/proyecto.html?id=${id}`;
+        }
+
+        // Eliminar un proyecto
+        function deleteProyecto(id) {
+            fetch(`/api/proyectos/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Proyecto eliminado');
+                    location.reload();
+                } else {
+                    alert('Error al eliminar el proyecto');
+                }
+            });
+        }
+
+        // Crear formulario para agregar un proyecto
+        function createProyectoForm() {
+            window.location.href = '/crear-proyecto.html';
+        }
+    </script>
+</body>
+</html>
