@@ -1,7 +1,0 @@
-Si no lo has hecho anteriormente:
-
-1º- Utiliza PREPARED STATEMENTS en los métodos de la tarea anterior. ( connection.prepareStatement("INSERT INTO .... ") )
-
-2º- Utiliza TRANSACCIONES en los métodos ( connection.setAutoCommit(false); + connection.commit();
-
-3º- Utiliza RESULTSET con tipo = ResultSet.TYPE_SCROLL_INSENSITIVE.

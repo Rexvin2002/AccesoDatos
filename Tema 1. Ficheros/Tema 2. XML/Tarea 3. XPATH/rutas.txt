@@ -1,9 +1,0 @@
-Siguiendo el siguiente tutorial, realiza 4/5 consultas XPATH sobre un fichero XML libre descargado de Internet.
-
-https://howtodoinjava.com/java/xml/java-xpath-tutorial-example
-
-Más información sobre XPATH en estos enlaces:
-
-https://www.w3schools.com/xml/xpath_operators.asp
-
-https://docs.oracle.com/javase/8/docs/api/index.html?javax/xml/xpath/XPath.html
