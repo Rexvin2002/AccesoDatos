@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle del Pedido</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>Detalles del Pedido</h1>
+
+<p><strong>ID:</strong> <span th:text="${pedido.id}"></span></p>
+<p><strong>Fecha:</strong> <span th:text="${pedido.fecha}"></span></p>
+<p><strong>Cliente:</strong> <span th:text="${pedido.cliente.nombre}"></span></p>
+
+<h3>Detalles del Pedido</h3>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="detalle : ${pedido.detalles}">
+            <td th:text="${detalle.producto.nombre}"></td>
+            <td th:text="${detalle.cantidad}"></td>
+            <td th:text="${detalle.subtotal}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Total del Pedido: <span th:text="${total}"></span></h3>
+
+<button type="button" onclick="window.location.href='/pedidos'">Volver</button>
+</body>
+</html>

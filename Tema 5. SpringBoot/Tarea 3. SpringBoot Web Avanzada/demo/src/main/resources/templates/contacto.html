@@ -1,0 +1,15 @@
+<!-- templates/contacto.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Contacto</title>
+</head>
+<body>
+    <h1>Contacto</h1>
+    <p th:text="${mensaje}"></p>
+    <div class="contact-info">
+        <p>Email: <span th:text="${email}"></span></p>
+        <p>Teléfono: <span th:text="${telefono}"></span></p>
+    </div>
+</body>
+</html>

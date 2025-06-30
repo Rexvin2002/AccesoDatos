@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Tienda Online</title>
+</head>
+<body>
+    <h1 th:text="${title}"></h1>
+    <p th:text="${welcomeMessage}"></p>
+    
+    <nav>
+        <a href="/">Inicio</a> |
+        <a href="/productos">Productos</a> |
+        <a href="/contacto">Contacto</a>
+    </nav>
+</body>
+</html>
