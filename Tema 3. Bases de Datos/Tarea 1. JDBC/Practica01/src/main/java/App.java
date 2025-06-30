@@ -45,5 +45,7 @@ public class App {
         } catch (ClassNotFoundException | SQLException ex) {
             System.err.println("Error: " + ex.getMessage());
         }
+        
     }
+
 }

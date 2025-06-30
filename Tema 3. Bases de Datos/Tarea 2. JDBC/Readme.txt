@@ -1,90 +1,134 @@
-# JDBC Utilities - README
+# JDBC Database Manager - README
 
 ## Descripción
-Este proyecto contiene dos clases Java para trabajar con bases de datos MySQL con enfoque en gestión de usuarios y licencias:
-1. **JDBC1**: Clase utilitaria avanzada para operaciones CRUD con transacciones
-2. **App**: Ejemplo básico de conexión y consulta a MySQL
+Este proyecto contiene una clase Java (`JDBC1`) para gestionar bases de datos MySQL con enfoque en usuarios y licencias, además de una clase de demostración básica (`App`).
 
 ## JDBC1 - Clase Avanzada
 
 ### Características principales
-- Conexión automatizada a MySQL con control de transacciones
-- Operaciones CRUD completas con PreparedStatement
 - Gestión de tablas relacionadas (usuarios-licencias)
-- Transacciones atómicas para operaciones complejas
-- Cierre automático de recursos
-- Métodos específicos para gestión de licencias
+- Transacciones ACID con commit/rollback manual
+- Operaciones CRUD completas
+- Inserción de múltiples registros relacionados
+- Eliminación en cascada automática
+- Consultas avanzadas con diferentes formatos de resultado
 
-### Métodos disponibles
+### Métodos principales
 
-| Método | Descripción | Ejemplo |
-|--------|-------------|---------|
-| `createTables()` | Crea las tablas usuarios y licencias | `jdbc.createTables()` |
-| `insertLicencias()` | Inserta usuario con múltiples licencias | `jdbc.insertLicencias(dni, dir, cp, nombre, licencias)` |
-| `eliminarLicencias()` | Elimina licencias por DNI | `jdbc.eliminarLicencias("12345678A")` |
-| `cleanUserByDNI()` | Elimina usuario por DNI | `jdbc.cleanUserByDNI("12345678A")` |
-| `selectColumna()` | Obtiene todos los valores de una columna | `jdbc.selectColumna("nombre")` |
-| `selectRowList()` | Obtiene una fila como List | `jdbc.selectRowList(2)` |
-| `selectRowMap()` | Obtiene una fila como Map | `jdbc.selectRowMap(2)` |
-| `update()` | Actualiza campos | `jdbc.update(1, "nombre", "Juan")` |
-| `delete()` | Elimina un registro | `jdbc.delete(3)` |
+#### Gestión de tablas
+```java
+public void createTables() throws SQLException
+```
+Crea las tablas usuarios y licencias con sus relaciones.
+
+#### Operaciones con usuarios
+```java
+public boolean insertLicencias(String DNI, String DIRECCION, String CP, String NOMBRE,
+                             ArrayList<ArrayList<String>> licencias)
+```
+Inserta un usuario con sus licencias asociadas en una transacción.
+
+```java
+public boolean cleanUserByDNI(String DNI) throws SQLException
+```
+Elimina un usuario por DNI (incluye licencias por cascada).
+
+#### Operaciones con licencias
+```java
+public boolean eliminarLicencias(String DNI)
+```
+Elimina todas las licencias de un usuario.
+
+#### Consultas de datos
+```java
+public String selectCampo(int numRegistro, String nomColumna)
+public List<String> selectColumna(String nomColumna)
+public List<String> selectRowList(int numRegistro)
+public Map<String, String> selectRowMap(int numRegistro)
+```
+Diferentes métodos para recuperar datos en varios formatos.
 
 ### Ejemplo de uso
 ```java
-JDBC1 jdbc = new JDBC1("mi_bd", "usuario", "contraseña");
-jdbc.createTables();
-
-// Insertar usuario con licencias
-ArrayList<ArrayList<String>> licencias = new ArrayList<>();
-ArrayList<String> licencia1 = new ArrayList<>();
-licencia1.add("B1"); licencia1.add("2023-01-01"); licencia1.add("2025-01-01");
-licencias.add(licencia1);
-
-jdbc.insertLicencias("12345678A", "Calle Falsa 123", "28000", "Juan Pérez", licencias);
-
-// Consultar datos
-System.out.println(jdbc.selectColumna("nombre"));
-
-jdbc.closeConnection();
+try {
+    JDBC1 db = new JDBC1("testdb", "root", "password");
+    db.createTables();
+    
+    // Insertar usuario con licencias
+    ArrayList<ArrayList<String>> licencias = new ArrayList<>();
+    ArrayList<String> licencia = new ArrayList<>();
+    licencia.add("B1");
+    licencia.add("2023-01-01");
+    licencia.add("2025-01-01");
+    licencias.add(licencia);
+    
+    db.insertLicencias("12345678A", "Calle Principal", "28001", "Juan Pérez", licencias);
+    
+    // Consultar datos
+    Map<String, String> usuario = db.selectRowMap(0);
+    System.out.println("Usuario: " + usuario.get("NOMBRE"));
+    
+    db.closeConnection();
+} catch (SQLException e) {
+    System.err.println("Error de base de datos: " + e.getMessage());
+}
 ```
 
 ## App - Ejemplo Básico
 
 ### Características
-- Demostración simple de conexión JDBC
-- Consulta básica a una tabla de usuarios
-- Manejo de excepciones
+- Conexión básica a MySQL
+- Ejemplo de consulta simple
+- Manejo de recursos con try-with-resources
 - Carga explícita del driver JDBC
 
-### Ejemplo de conexión
+### Código de ejemplo
 ```java
-String url = "jdbc:mysql://localhost:3306/testdb";
-String user = "root";
-String password = "passwd";
-
-Class.forName("com.mysql.cj.jdbc.Driver");
-Connection conn = DriverManager.getConnection(url, user, password);
-Statement stmt = conn.createStatement();
-ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-
-while(rs.next()) {
-    System.out.println(rs.getString("name"));
+public class App {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/testdb";
+        String user = "root";
+        String password = "passwd";
+        
+        try {
+            // Cargar driver MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver cargado correctamente");
+            
+            // Establecer conexión
+            try (Connection conn = DriverManager.getConnection(url, user, password);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery("SELECT * FROM users")) {
+                
+                System.out.println("Conexión establecida");
+                
+                // Procesar resultados
+                while (rs.next()) {
+                    System.out.println("ID: " + rs.getInt("id") + 
+                                     ", Nombre: " + rs.getString("name"));
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
 }
 ```
 
 ## Requisitos
-- Java 8+
-- MySQL Server 5.7+
-- Connector/J (mysql-connector-java 8.0+)
+- Java 11 o superior
+- MySQL Server 8.0+
+- Connector/J 8.0+
 - Tablas: `usuarios` y `licencias` (se crean automáticamente)
 
 ## Configuración
 1. Importar el proyecto en tu IDE
-2. Añadir el conector MySQL al classpath
-3. Modificar credenciales en los constructores
-4. Ejecutar App.java o JDBC1.java
+2. Añadir mysql-connector-java al classpath
+3. Configurar credenciales en los constructores
+4. Ejecutar App.java para prueba básica o JDBC1.java para funcionalidad avanzada
 
-## Estructura de tablas
+## Estructura de la base de datos
+Las tablas se crean con este esquema:
 ```sql
 CREATE TABLE usuarios (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -103,12 +147,10 @@ CREATE TABLE licencias (
 );
 ```
 
-## Mejoras implementadas
+## Buenas prácticas implementadas
+- Uso de PreparedStatement para evitar inyección SQL
 - Transacciones atómicas
-- Relaciones entre tablas con claves foráneas
-- Inserción de múltiples registros relacionados
-- Eliminación en cascada
-- PreparedStatement para todas las operaciones
-
-## Autor
-Kevin Gómez Valderas
+- Gestión adecuada de recursos
+- Tipado fuerte de resultados
+- Manejo completo de excepciones
+- Separación clara de responsabilidades

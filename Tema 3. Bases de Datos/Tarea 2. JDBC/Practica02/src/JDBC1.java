@@ -283,7 +283,7 @@ public class JDBC1 {
         try {
             JDBC1 jdbc = new JDBC1("testdb", "root", "passwd");
             jdbc.createTables();
-            System.out.println("\nConexión establecida y tablas creadas.");
+            System.out.println("\nConexión establecida y tablas creadas.\n");
 
             // Clean existing data first
             String testDNI = "12345678A";

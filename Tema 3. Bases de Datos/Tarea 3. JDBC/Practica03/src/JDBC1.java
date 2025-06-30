@@ -22,12 +22,15 @@ public class JDBC1 {
     // Método para seleccionar un campo específico de un registro
     public String selectCampo(int numRegistro, String nomColumna) throws SQLException {
         String query = "SELECT " + nomColumna + " FROM agenda LIMIT 1 OFFSET ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+        try (PreparedStatement stmt = conexion.prepareStatement(query,
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             stmt.setInt(1, numRegistro);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString(nomColumna);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString(nomColumna);
+                }
             }
+            conexion.commit();
         } catch (SQLException e) {
             conexion.rollback();
             throw e;
@@ -39,11 +42,13 @@ public class JDBC1 {
     public List<String> selectColumna(String nomColumna) throws SQLException {
         List<String> values = new ArrayList<>();
         String query = "SELECT " + nomColumna + " FROM agenda";
-        try (PreparedStatement stmt = conexion.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-             ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = conexion.prepareStatement(query,
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 values.add(rs.getString(nomColumna));
             }
+            conexion.commit();
         } catch (SQLException e) {
             conexion.rollback();
             throw e;
@@ -55,15 +60,18 @@ public class JDBC1 {
     public List<String> selectRowList(int numRegistro) throws SQLException {
         List<String> row = new ArrayList<>();
         String query = "SELECT * FROM agenda LIMIT 1 OFFSET ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+        try (PreparedStatement stmt = conexion.prepareStatement(query,
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             stmt.setInt(1, numRegistro);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                ResultSetMetaData metaData = rs.getMetaData();
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    row.add(rs.getString(i));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        row.add(rs.getString(i));
+                    }
                 }
             }
+            conexion.commit();
         } catch (SQLException e) {
             conexion.rollback();
             throw e;
@@ -75,15 +83,18 @@ public class JDBC1 {
     public Map<String, String> selectRowMap(int numRegistro) throws SQLException {
         Map<String, String> rowMap = new HashMap<>();
         String query = "SELECT * FROM agenda LIMIT 1 OFFSET ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+        try (PreparedStatement stmt = conexion.prepareStatement(query,
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             stmt.setInt(1, numRegistro);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                ResultSetMetaData metaData = rs.getMetaData();
-                for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                    rowMap.put(metaData.getColumnName(i), rs.getString(i));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    for (int i = 1; i <= metaData.getColumnCount(); i++) {
+                        rowMap.put(metaData.getColumnName(i), rs.getString(i));
+                    }
                 }
             }
+            conexion.commit();
         } catch (SQLException e) {
             conexion.rollback();
             throw e;
@@ -152,13 +163,13 @@ public class JDBC1 {
     public static void main(String[] args) {
         try {
             JDBC1 jdbc = new JDBC1("testdb", "root", "passwd");
-            System.out.println("CONECTANDO");
+            System.out.println("\nCONECTADO\n");
 
             // EJEMPLO DE SELECCIÓN
             System.out.println(jdbc.selectCampo(0, "NOMBRE"));
             System.out.println(jdbc.selectColumna("DIRECCION"));
             System.out.println(jdbc.selectRowList(0));
-            System.out.println(jdbc.selectRowMap(0));
+            System.out.println(jdbc.selectRowMap(0)+"\n");
 
             // EJEMPLO DE ACTUALIZACIÓN
             Map<String, String> updateValues = new HashMap<>();
