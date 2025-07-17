@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ShowFileAndFolderDetails",
+            "request": "launch",
+            "mainClass": "ShowFileAndFolderDetails",
+            "projectName": "AccesoDatos_365c1423"
+        },
+        {
+            "type": "java",
+            "name": "FileClass",
+            "request": "launch",
+            "mainClass": "FileClass",
+            "projectName": "AccesoDatos_365c1423"
+        },
+        {
+            "type": "java",
+            "name": "SequentialFileReading2",
+            "request": "launch",
+            "mainClass": "SequentialFileReading2",
+            "projectName": "AccesoDatos_365c1423"
+        },
+        {
+            "type": "java",
             "name": "SpringexampleApplication",
             "request": "launch",
             "mainClass": "SpringexampleApplication",

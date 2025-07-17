@@ -1,55 +1,67 @@
-# README - BinaryRecord
+# BinaryRecord - Sistema de Gestión de Registros Binarios
 
-## 📝 Descripción
-Clase Java para manejo de registros en archivos binarios con campos de longitud fija. Permite operaciones CRUD (Crear, Leer, Actualizar) sobre registros estructurados.
+## Descripción
+Este programa Java implementa un sistema para gestionar registros en archivos binarios con campos de longitud fija. Permite realizar operaciones básicas CRUD (Crear, Leer, Actualizar) sobre registros estructurados.
 
-## 🔧 Características principales
-- **Almacenamiento eficiente** en archivos binarios
-- **Estructura de registros** con campos de longitud fija
-- **Operaciones básicas**:
-  - Inserción de registros
-  - Lectura de registros
-  - Modificación de registros
-- **Acceso aleatorio** mediante `RandomAccessFile`
-- **Interfaz de menú** interactivo
+## Características principales
 
-## 🛠️ Uso
-1. **Compilación**:
+### Estructura de datos
+- **Registros con campos de longitud fija**:
+  - ID: 9 bytes
+  - NAME: 32 bytes  
+  - DIRECTION: 32 bytes
+  - ZC: 5 bytes
+- **Total por registro**: 78 bytes
+- **Codificación UTF-8**: Soporte para caracteres internacionales
+
+### Funcionalidades
+- **Inserción**: Añadir nuevos registros en posiciones específicas
+- **Lectura**: Recuperar registros completos
+- **Modificación**: Actualizar registros existentes
+- **Validación**: Comprobación de registros existentes
+
+## Uso
+
+### Compilación y ejecución
 ```bash
-javac Unidad01/Practica08/BinaryRecord.java
+javac Main/BinaryRecord.java
+java Main.BinaryRecord
 ```
 
-2. **Ejecución**:
-```bash
-java Unidad01.Practica08.BinaryRecord
+### Menú interactivo
+El programa ofrece un menú con 4 opciones:
+1. Insertar registro
+2. Leer registro  
+3. Modificar registro
+4. Salir
+
+## Ejemplo de uso
+```java
+// Crear instancia
+BinaryRecord binaryRecord = new BinaryRecord(
+    "datos.bin", 
+    Arrays.asList("ID", "NAME", "DIRECTION", "ZC"),
+    Arrays.asList(9, 32, 32, 5)
+);
+
+// Insertar registro
+Map<String, String> nuevoRegistro = new HashMap<>();
+nuevoRegistro.put("ID", "12345678A");
+nuevoRegistro.put("NAME", "Juan Pérez");
+binaryRecord.insert(nuevoRegistro, 0);
+
+// Leer registro
+Map<String, String> registro = binaryRecord.read(0);
 ```
 
-3. **Estructura de campos predefinida**:
-   - ID (9 caracteres)
-   - NAME (32 caracteres)
-   - DIRECTION (32 caracteres)
-   - ZC (5 caracteres)
+## Ventajas
+- **Eficiencia**: Acceso directo a registros con RandomAccessFile
+- **Consistencia**: Campos de longitud fija garantizan estructura uniforme
+- **Sencillez**: Interfaz fácil de usar con menú interactivo
 
-## 📋 Funcionalidades del menú
-1. **Insertar registro**: Permite añadir nuevos registros en posiciones específicas
-2. **Leer registro**: Muestra el contenido de un registro en una posición dada
-3. **Modificar registro**: Actualiza los campos de un registro existente
-4. **Salir**: Finaliza la ejecución del programa
-
-## ⚙️ Requisitos
+## Requisitos
 - Java JDK 8 o superior
 - Permisos de lectura/escritura en el directorio de trabajo
-- Sistema operativo compatible con Java NIO
 
-## 📊 Estructura del archivo binario
-- Registros de longitud fija (78 bytes cada uno)
-- Campos alineados y rellenados con espacios
-- Codificación UTF-8 para caracteres especiales
-
-## 👨‍💻 Autor
-Kevin Gómez Valderas
-
-## 💡 Notas adicionales
-- Los registros existentes se sobrescriben al insertar en la misma posición
-- El programa incluye 3 registros de ejemplo al iniciar
-- Compatible con caracteres especiales y acentuados
+## Autor
+Kevin Gómez Valderas - 2º Desarrollo de Aplicaciones Multiplataforma (DAM)

@@ -1,8 +1,11 @@
 {
     "jdk.advanced.disable.nbjavac": false,
     "java.project.sourcePaths": [
+        "Tema 4. Persistencia Objetos JPA/Tarea 1. Crear un controlador con JPA/springexample/src/main/java/com/proyectomaven/springexample",
         "Tema 3. Bases de Datos/Tarea 2. JDBC/Practica02/src",
         "Tema 3. Bases de Datos/Tarea 1. JDBC/Practica04/Practica04/src/main/java",
-        "Tema 4. Persistencia Objetos JPA/Tarea 1. Crear un controlador con JPA/springexample/src/main/java/com/proyectomaven/springexample"
-    ]
+        "Ficheros/Acceso a Ficheros",
+        "Ficheros/Clase FILE"
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
