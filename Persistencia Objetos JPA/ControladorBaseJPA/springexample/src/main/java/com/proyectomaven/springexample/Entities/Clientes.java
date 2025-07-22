@@ -1,5 +1,8 @@
 package com.proyectomaven.springexample.Entities;
 
+/**
+ * Kevin Gómez Valderas 2ºDAM
+ */
 import jakarta.persistence.*;
 import java.util.Date;
 

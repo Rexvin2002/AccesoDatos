@@ -1,5 +1,8 @@
 package com.proyectomaven.springexample;
 
+/**
+ * Kevin Gómez Valderas 2ºDAM
+ */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +20,7 @@ public class SpringexampleApplication implements CommandLineRunner {
 
     @Autowired
     private RepositorioClientes clientRepository;
-    
+
     private final Random random = new Random();
 
     public static void main(String[] args) {
@@ -37,15 +40,15 @@ public class SpringexampleApplication implements CommandLineRunner {
             // 1. Limpieza inicial segura (solo datos, no estructura)
             System.out.println("Preparando datos...");
             clientRepository.deleteAllInBatch(); // Más eficiente para limpieza
-            
+
             // 2. CREATE - Crear nuevos clientes con nombres únicos dinámicos
             String nombreUnico1 = "Ana_" + random.nextInt(1000);
             String nombreUnico2 = "Luis_" + random.nextInt(1000);
-            
+
             System.out.println("\nCreando clientes...");
             Clientes cliente1 = new Clientes(nombreUnico1, "García", "Calle Primavera 23");
             Clientes cliente2 = new Clientes(nombreUnico2, "Martínez", "Avenida Libertad 45");
-            
+
             clientRepository.saveAll(List.of(cliente1, cliente2));
             System.out.println("Clientes creados: " + nombreUnico1 + " y " + nombreUnico2);
 
@@ -75,7 +78,7 @@ public class SpringexampleApplication implements CommandLineRunner {
             // 6. Resultado final
             System.out.println("\nEstado final de clientes:");
             imprimirClientes();
-            
+
         } catch (Exception e) {
             System.err.println("Error durante la ejecución: " + e.getMessage());
         }
@@ -87,9 +90,9 @@ public class SpringexampleApplication implements CommandLineRunner {
             System.out.println("No hay clientes registrados");
         } else {
             clientes.forEach(c -> System.out.println(
-                "ID: " + c.getIdEmpleado() + 
-                " - " + c.getNombre() + " " + c.getApellido() +
-                " - Dirección: " + c.getDireccion()));
+                    "ID: " + c.getIdEmpleado()
+                    + " - " + c.getNombre() + " " + c.getApellido()
+                    + " - Dirección: " + c.getDireccion()));
         }
     }
 }

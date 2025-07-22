@@ -1,5 +1,8 @@
 package com.proyectomaven.springexample.Repositories;
 
+/**
+ * Kevin Gómez Valderas 2ºDAM
+ */
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

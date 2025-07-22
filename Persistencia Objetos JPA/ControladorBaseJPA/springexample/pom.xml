@@ -31,11 +31,6 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
-        <!-- Actuator: Monitorización y métricas de la aplicación Spring Boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
 
         <!-- Spring Data JPA: Integración con bases de datos usando JPA/Hibernate -->
         <dependency>
@@ -56,12 +51,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
+        
     </dependencies>
 
     <build>
