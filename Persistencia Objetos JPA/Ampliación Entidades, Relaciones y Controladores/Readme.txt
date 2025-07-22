@@ -1,107 +1,105 @@
-# README - Sistema de Gestión de Pedidos con Spring Boot
+# Sistema de Gestión de Biblioteca con Spring Boot y JPA
 
-## 📝 Descripción
-Aplicación Spring Boot completa para gestión de clientes, productos, categorías y pedidos con relaciones JPA avanzadas. El proyecto demuestra:
+## Descripción
+Este proyecto es un sistema de gestión de biblioteca desarrollado con Spring Boot y Spring Data JPA. Implementa un modelo de datos relacional para gestionar libros, autores, préstamos y usuarios de una biblioteca.
 
-- **Modelado de entidades** con relaciones complejas (OneToMany, ManyToMany)
-- **Repositorios Spring Data JPA** con consultas personalizadas
-- **Operaciones transaccionales** completas
-- **Logging** con SLF4J
-- **Arquitectura en capas** bien definida
+## Modelo de Datos
 
-## 🔧 Características principales
+### Entidades principales:
 
-### ✔️ Modelo de datos completo
-- **Clientes**: Información básica de clientes
-- **Productos**: Catálogo de productos con precios y stock
-- **Categorías**: Clasificación de productos (relación ManyToMany)
-- **Pedidos**: Registro de transacciones con fechas y totales
+1. **Libro**
+   - Información básica (título, ISBN, año de publicación, editorial)
+   - Relación ManyToMany con Autores
+   - Relación OneToMany con Ejemplares
 
-### 🛡️ Relaciones JPA avanzadas
-- `@OneToMany` entre Productos y Pedidos
-- `@ManyToOne` entre Pedidos y Clientes/Productos
-- `@ManyToMany` entre Productos y Categorías
-- FetchType.LAZY para optimización
+2. **Autor**
+   - Datos personales (nombre, apellido, nacionalidad)
+   - Relación ManyToMany con Libros
 
-### 📊 Consultas personalizadas
-- Consultas JPQL en repositorios
-- Métodos derivados de queries
-- Agregaciones (COUNT, SUM)
-- Filtros por rangos (fechas, precios)
+3. **Ejemplar**
+   - Información física (código de barras, estado, ubicación)
+   - Relación ManyToOne con Libro
+   - Relación OneToMany con Préstamos
 
-## 🛠️ Configuración y uso
+4. **Usuario**
+   - Datos personales (nombre, apellido, email, teléfono)
+   - Relación OneToMany con Préstamos
 
-### 1. Requisitos previos
+5. **Préstamo**
+   - Registro de préstamos (fecha préstamo, fecha devolución, estado)
+   - Relaciones ManyToOne con Usuario y Ejemplar
+
+## Características Técnicas
+
+- **Spring Data JPA** para operaciones CRUD
+- **Mapeo de relaciones** bidireccionales
+- **Validación de datos** con anotaciones JPA
+- **Generación automática de IDs** con estrategia IDENTITY
+- **Consultas personalizadas** en repositorios
+
+## Repositorios Implementados
+
+1. **RepositorioLibros**
+   - Métodos estándar de JpaRepository
+   - Búsqueda por título y ISBN
+
+2. **RepositorioAutores**
+   - Búsqueda por nombre y apellido
+   - Consulta de libros por autor
+
+3. **RepositorioEjemplares**
+   - Búsqueda por código de barras
+   - Consulta de ejemplares disponibles
+
+4. **RepositorioUsuarios**
+   - Búsqueda por email y teléfono
+   - Consulta de préstamos activos por usuario
+
+5. **RepositorioPrestamos**
+   - Búsqueda por fechas y estado
+   - Consulta de préstamos vencidos
+
+## Configuración y Uso
+
+### Requisitos:
 - Java 17+
 - Maven 3.6+
-- Base de datos configurada (MySQL recomendado)
+- Base de datos MySQL o H2
 
-### 2. Estructura del proyecto
-```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/proyectomaven/springexample/
-│   │       ├── Entities/       # Entidades JPA
-│   │       ├── Repositories/   # Interfaces de repositorio
-│   │       └── SpringexampleApplication.java  # Clase principal
-│   └── resources/
-│       └── application.properties # Configuración BD
-```
-
-### 3. Ejecución
+### Instalación:
 ```bash
+mvn clean install
 mvn spring-boot:run
 ```
 
-## ⚙️ Ejemplos de operaciones
-
-### Consultas de clientes
-```java
-// Buscar por nombre y apellido
-List<Clientes> clientes = clienteRepository.findByNombreAndApellidoJPQL("Juan", "Perez");
-
-// Actualizar dirección
-clienteRepository.updateDireccion(1L, "Nueva Dirección 123");
-
-// Eliminar por nombre y apellido
-clienteRepository.deleteByNombreAndApellido("Ana", "Gomez");
+### Configuración de Base de Datos:
+Editar `application.properties`:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca
+spring.datasource.username=usuario
+spring.datasource.password=contraseña
+spring.jpa.hibernate.ddl-auto=update
 ```
 
-### Consultas de productos
-```java
-// Productos con precio > 500
-List<Productos> productos = productosRepository.findByPrecioGreaterThan(BigDecimal.valueOf(500));
+## Ejemplo de Operaciones
 
-// Suma total de stock
-Integer totalStock = productosRepository.sumTotalStock();
+El método `run` en la clase principal demuestra:
+1. Creación de autores y libros
+2. Registro de ejemplares
+3. Registro de usuarios
+4. Proceso de préstamo y devolución
+
+## Estructura de Paquetes
+
+```
+com.proyectomaven.springexample
+├── Entities        # Entidades JPA
+├── Repositories    # Interfaces de repositorio
+└── SpringexampleApplication.java  # Clase principal
 ```
 
-### Consultas de pedidos
-```java
-// Pedidos entre fechas
-List<Pedidos> pedidos = pedidosRepository.findByFechaPedidoBetween(
-    LocalDate.of(2024, 1, 1), 
-    LocalDate.of(2024, 12, 31));
+## Autor
+Kevin Gómez Valderas - 2º DAM
 
-// Suma de totales por cliente
-BigDecimal total = pedidosRepository.sumTotalByClienteId(1L);
-```
-
-## 👨‍💻 Autor
-Kevin Gómez Valderas
-
-## 💡 Buenas prácticas implementadas
-- **Inyección de dependencias** con `@Autowired`
-- **Transacciones** con `@Transactional`
-- **Logging** con SLF4J
-- **Consultas parametrizadas** para seguridad
-- **Separación clara** de responsabilidades
-- **Documentación** completa de entidades y repositorios
-
-## 📌 Personalización
-Para adaptar el proyecto:
-1. Configurar conexión a BD en `application.properties`
-2. Modificar entidades según necesidades
-3. Añadir nuevos repositorios y consultas
-4. Extender la lógica de negocio
+## Licencia
+Este proyecto es de código abierto para fines educativos. Se permite su uso y modificación manteniendo los créditos al autor original.
