@@ -28,7 +28,7 @@ public class Pedido {
     private Long idPedido;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", referencedColumnName = "id_empleado")
+    @JoinColumn(name = "id_cliente")
     private Clientes cliente;
 
     @Column(name = "fecha_pedido", nullable = false)

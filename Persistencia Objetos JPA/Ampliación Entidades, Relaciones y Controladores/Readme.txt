@@ -1,105 +1,87 @@
-# Sistema de Gestión de Biblioteca con Spring Boot y JPA
+# Sistema de Gestión de Comercio Electrónico
 
-## Descripción
-Este proyecto es un sistema de gestión de biblioteca desarrollado con Spring Boot y Spring Data JPA. Implementa un modelo de datos relacional para gestionar libros, autores, préstamos y usuarios de una biblioteca.
+## Descripción del Proyecto
+Este proyecto es un sistema de gestión de comercio electrónico desarrollado con Spring Boot que incluye funcionalidades CRUD para clientes, productos, pedidos, categorías y proveedores. El sistema utiliza Spring Data JPA para la persistencia de datos y está configurado para trabajar con MySQL.
 
-## Modelo de Datos
+## Estructura del Proyecto
 
-### Entidades principales:
+### Entidades Principales
+1. **Clientes**: Gestión de información de clientes con relaciones a pedidos y carritos de compra
+2. **Productos**: Catálogo de productos con categorías y proveedores asociados
+3. **Pedidos**: Sistema de pedidos con detalles y estado
+4. **CategoriasProducto**: Clasificación de productos
+5. **Proveedores**: Gestión de proveedores con relación many-to-many a productos
 
-1. **Libro**
-   - Información básica (título, ISBN, año de publicación, editorial)
-   - Relación ManyToMany con Autores
-   - Relación OneToMany con Ejemplares
+### Repositorios
+- RepositorioClientes (con consultas personalizadas JPQL y nativas)
+- RepositorioProductos
+- RepositorioPedidos
+- RepositorioCategorias
+- RepositorioProveedores (con métodos personalizados)
+- RepositorioDetallesPedido
 
-2. **Autor**
-   - Datos personales (nombre, apellido, nacionalidad)
-   - Relación ManyToMany con Libros
+## Configuración
 
-3. **Ejemplar**
-   - Información física (código de barras, estado, ubicación)
-   - Relación ManyToOne con Libro
-   - Relación OneToMany con Préstamos
+### Base de Datos
+El proyecto está configurado para MySQL con las siguientes propiedades (en `application.properties`):
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/spring_example_db
+spring.datasource.username=root
+spring.datasource.password=passwd
+spring.jpa.hibernate.ddl-auto=create
+```
 
-4. **Usuario**
-   - Datos personales (nombre, apellido, email, teléfono)
-   - Relación OneToMany con Préstamos
-
-5. **Préstamo**
-   - Registro de préstamos (fecha préstamo, fecha devolución, estado)
-   - Relaciones ManyToOne con Usuario y Ejemplar
+### Ejecución
+La clase principal `SpringexampleApplication` implementa `CommandLineRunner` y realiza operaciones de ejemplo al iniciar:
+1. Crea un cliente de ejemplo
+2. Busca y actualiza la dirección del cliente
+3. Muestra los cambios por consola
 
 ## Características Técnicas
 
-- **Spring Data JPA** para operaciones CRUD
-- **Mapeo de relaciones** bidireccionales
-- **Validación de datos** con anotaciones JPA
-- **Generación automática de IDs** con estrategia IDENTITY
-- **Consultas personalizadas** en repositorios
+- Spring Boot 3.x
+- Spring Data JPA con Hibernate
+- Configuración automática de la base de datos
+- Relaciones JPA:
+  - OneToOne (Cliente-CarritoCompras)
+  - OneToMany (Cliente-Pedidos, Categoria-Productos)
+  - ManyToOne (DetallePedido-Pedido/Producto)
+  - ManyToMany (Producto-Proveedor)
+- Consultas personalizadas con JPQL y SQL nativo
+- Validación de campos con anotaciones JPA (@Column, @NotNull, etc.)
 
-## Repositorios Implementados
+## Ejemplos de Uso
 
-1. **RepositorioLibros**
-   - Métodos estándar de JpaRepository
-   - Búsqueda por título y ISBN
+### Consultas personalizadas en RepositorioClientes:
+```java
+@Query("SELECT c FROM Clientes c WHERE c.nombre = :nombre AND c.apellido = :apellido")
+List<Clientes> findByNombreCompleto(@Param("nombre") String nombre, @Param("apellido") String apellido);
 
-2. **RepositorioAutores**
-   - Búsqueda por nombre y apellido
-   - Consulta de libros por autor
+@Query(value = "SELECT * FROM clientes WHERE fecha_registro > :fecha", nativeQuery = true)
+List<Clientes> findClientesRegistradosDespuesDe(@Param("fecha") Date fecha);
+```
 
-3. **RepositorioEjemplares**
-   - Búsqueda por código de barras
-   - Consulta de ejemplares disponibles
+### Relación ManyToMany gestionada (Proveedor-Producto):
+```java
+public void agregarProducto(Producto producto) {
+    this.productos.add(producto);
+    producto.getProveedores().add(this);
+}
+```
 
-4. **RepositorioUsuarios**
-   - Búsqueda por email y teléfono
-   - Consulta de préstamos activos por usuario
+## Requisitos del Sistema
 
-5. **RepositorioPrestamos**
-   - Búsqueda por fechas y estado
-   - Consulta de préstamos vencidos
-
-## Configuración y Uso
-
-### Requisitos:
 - Java 17+
-- Maven 3.6+
-- Base de datos MySQL o H2
-
-### Instalación:
-```bash
-mvn clean install
-mvn spring-boot:run
-```
-
-### Configuración de Base de Datos:
-Editar `application.properties`:
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/biblioteca
-spring.datasource.username=usuario
-spring.datasource.password=contraseña
-spring.jpa.hibernate.ddl-auto=update
-```
-
-## Ejemplo de Operaciones
-
-El método `run` en la clase principal demuestra:
-1. Creación de autores y libros
-2. Registro de ejemplares
-3. Registro de usuarios
-4. Proceso de préstamo y devolución
-
-## Estructura de Paquetes
-
-```
-com.proyectomaven.springexample
-├── Entities        # Entidades JPA
-├── Repositories    # Interfaces de repositorio
-└── SpringexampleApplication.java  # Clase principal
-```
+- MySQL 8+
+- Maven
 
 ## Autor
 Kevin Gómez Valderas - 2º DAM
 
-## Licencia
-Este proyecto es de código abierto para fines educativos. Se permite su uso y modificación manteniendo los créditos al autor original.
+## Notas Adicionales
+El proyecto incluye configuración para:
+- Mostrar SQL formateado en consola
+- Crear automáticamente la base de datos si no existe
+- Inicializar datos al arrancar la aplicación
+
+Para desarrollo se recomienda cambiar `spring.jpa.hibernate.ddl-auto` a `update` después de la primera ejecución.

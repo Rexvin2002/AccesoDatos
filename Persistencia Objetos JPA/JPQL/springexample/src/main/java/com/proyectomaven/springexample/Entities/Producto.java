@@ -12,9 +12,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "productos")
@@ -46,6 +49,9 @@ public class Producto {
     @OneToMany(mappedBy = "producto")
     private List<DetallePedido> detallesPedido;
 
+    @ManyToMany(mappedBy = "productos")
+    private Set<Proveedor> proveedores = new HashSet<>();
+    
     // Constructores, getters y setters
     public Producto() {
     }
@@ -119,6 +125,14 @@ public class Producto {
 
     public void setDetallesPedido(List<DetallePedido> detallesPedido) {
         this.detallesPedido = detallesPedido;
+    }
+
+    public Set<Proveedor> getProveedores() {
+        return proveedores;
+    }
+
+    public void setProveedores(Set<Proveedor> proveedores) {
+        this.proveedores = proveedores;
     }
 
 }

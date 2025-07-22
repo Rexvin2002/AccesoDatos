@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,8 +21,8 @@ public class Clientes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empleado")  // Asegurar que mapea correctamente
-    private Long idEmpleado;
+    @Column(name = "id_cliente")  // Cambiado de id_empleado a id_cliente
+    private Long idCliente;
 
     @Column(name = "nombre", unique = true, length = 40)
     private String nombre;
@@ -44,6 +45,9 @@ public class Clientes {
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos;
 
+    @OneToOne(mappedBy = "cliente")
+    private CarritoCompras carrito;
+
     // Constructores, getters y setters
     public Clientes() {
     }
@@ -54,12 +58,12 @@ public class Clientes {
         this.direccion = direccion;
     }
 
-    public Long getIdEmpleado() {
-        return idEmpleado;
+    public Long getIdCliente() {
+        return idCliente;
     }
 
-    public void setIdEmpleado(Long idEmpleado) {
-        this.idEmpleado = idEmpleado;
+    public void setIdCliente(Long idEmpleado) {
+        this.idCliente = idEmpleado;
     }
 
     public String getNombre() {
@@ -116,6 +120,14 @@ public class Clientes {
 
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public CarritoCompras getCarrito() {
+        return carrito;
+    }
+
+    public void setCarrito(CarritoCompras carrito) {
+        this.carrito = carrito;
     }
 
 }

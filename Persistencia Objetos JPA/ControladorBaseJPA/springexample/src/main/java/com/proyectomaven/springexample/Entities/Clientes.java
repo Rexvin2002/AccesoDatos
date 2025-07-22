@@ -12,7 +12,7 @@ public class Clientes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_empleado")
+    @Column(name = "id_cliente")
     private Long idEmpleado;
 
     @Column(name = "nombre", unique = true, length = 40)

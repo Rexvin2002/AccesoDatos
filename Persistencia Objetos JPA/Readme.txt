@@ -6,7 +6,7 @@ USE spring_example_db;
 
 -- Tabla clientes
 CREATE TABLE IF NOT EXISTS clientes (
-    id_empleado BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_cliente BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(40) UNIQUE NOT NULL,
     apellido VARCHAR(40),
     direccion VARCHAR(100),
