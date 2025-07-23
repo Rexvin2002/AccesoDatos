@@ -1,111 +1,107 @@
-# README - Sistema de Gestión de Empresa con Spring Boot
+# Sistema de Gestión de Comercio Electrónico
 
-## 📝 Descripción
-Aplicación Spring Boot completa para gestión empresarial que incluye:
-- **Departamentos**: Organización interna de la empresa
-- **Empleados**: Recursos humanos con relación a departamentos
-- **Proyectos**: Iniciativas empresariales con seguimiento
-- **API RESTful** completa con operaciones CRUD
-- **Consultas avanzadas** con Criteria API
+## Descripción del Proyecto
+Sistema de comercio electrónico desarrollado con Spring Boot que incluye funcionalidades CRUD completas para:
+- Gestión de clientes, productos y pedidos
+- Clasificación por categorías de productos
+- Administración de proveedores
+- Carritos de compra y detalles de pedidos
 
-## 🔧 Características principales
+## Estructura del Proyecto
 
-### ✔️ Modelo de datos completo
-- **Departamento**: Nombre, ubicación, presupuesto
-- **Empleado**: Datos personales, salario, fecha contratación
-- **Proyecto**: Nombre, presupuesto, estado, fechas
+### Entidades Principales
+| Entidad           | Relaciones JPA                          |
+|-------------------|-----------------------------------------|
+| **Clientes**      | OneToOne: CarritoCompras                |
+|                   | OneToMany: Pedidos                      |
+| **Productos**     | ManyToOne: CategoriasProducto           |
+|                   | ManyToMany: Proveedores                 |
+| **Pedidos**       | OneToMany: DetallesPedido               |
+| **Categorias**    | OneToMany: Productos                    |
+| **Proveedores**   | ManyToMany: Productos (gestión bidireccional) |
 
-### 🛡️ Relaciones JPA
-- `@OneToMany` entre Departamento y Empleados
-- `@ManyToOne` entre Empleado y Departamento
-- Mapeo correcto de fechas con `@Temporal`
+### Repositorios
+- `RepositorioClientes` (JPQL + consultas nativas)
+- `RepositorioProductos`
+- `RepositorioPedidos`
+- `RepositorioCategorias`
+- `RepositorioProveedores` (métodos personalizados)
+- `RepositorioDetallesPedido`
 
-### 📊 API REST completa
-- Controladores para cada entidad
-- Operaciones CRUD estándar
-- Manejo adecuado de respuestas HTTP
+## Configuración
 
-## 🛠️ Configuración y uso
-
-### 1. Requisitos previos
-- Java 17+
-- Maven 3.6+
-- Base de datos configurada (MySQL recomendado)
-
-### 2. Estructura del proyecto
-```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/proyectomaven/springexample/
-│   │       ├── Controllers/    # Controladores REST
-│   │       ├── Entities/       # Entidades JPA
-│   │       ├── Repositories/   # Repositorios Spring Data
-│   │       └── SpringexampleApplication.java
-│   └── resources/
-│       └── application.properties
+### Base de Datos (MySQL)
+`application.properties`:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/spring_example_db
+spring.datasource.username=root
+spring.datasource.password=passwd
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
 ```
 
-### 3. Endpoints disponibles
-- **Departamentos**: `/api/departamentos`
-- **Empleados**: `/api/empleados`
-- **Proyectos**: `/api/proyectos`
-
-## ⚙️ Ejemplos de uso
-
-### Consultas con Criteria API
+### Ejecución
+La clase principal `SpringexampleApplication` incluye operaciones de demostración:
+1. Creación de cliente de prueba
+2. Actualización de dirección
+3. Consulta y visualización de datos
 ```java
-// Ejemplo de consulta para empleados
-List<Empleado> empleados = empleadoRepository.findByCriteria(
-    entityManager,
-    "Juan",     // nombreFilter
-    "Pérez",    // apellidoFilter
-    3000.0,     // salarioFilter
-    null,       // fechaContratacionFilter
-    "salario",  // orderByField
-    true,       // orderAsc
-    false,      // all
-    10,         // maxResults
-    0           // firstResult
-);
+@SpringBootApplication
+public class SpringexampleApplication implements CommandLineRunner {
+    // Implementación con ejemplos CRUD
+}
 ```
 
-### Operaciones CRUD básicas
+## Características Técnicas
+- **Spring Boot 3.x** con Spring Data JPA/Hibernate
+- **Relaciones JPA**:
+  - `@OneToOne`, `@OneToMany`, `@ManyToOne`, `@ManyToMany`
+- Validación de campos con `@NotNull`, `@Column`, etc.
+- Consultas personalizadas JPQL/SQL nativo
+- Gestión automática de transacciones
+
+### Ejemplos Destacados
+**Consulta personalizada (Clientes):**
 ```java
-// Crear departamento
-Departamento depto = new Departamento("IT", "Madrid", 50000.0);
-departamentoRepository.save(depto);
-
-// Actualizar empleado
-empleadoRepository.findById(id).ifPresent(emp -> {
-    emp.setSalario(3500.0);
-    empleadoRepository.save(emp);
-});
-
-// Eliminar proyecto
-proyectoRepository.deleteById(1L);
+@Query("SELECT c FROM Clientes c WHERE c.nombre = :nombre AND c.apellido = :apellido")
+List<Clientes> findByNombreCompleto(String nombre, String apellido);
 ```
 
-## 👨‍💻 Autor
-Kevin Gómez Valderas
+**Relación ManyToMany (Producto-Proveedor):**
+```java
+// En EntidadProveedor
+public void agregarProducto(Producto producto) {
+    this.productos.add(producto);
+    producto.getProveedores().add(this); // Sincronización bidireccional
+}
+```
 
-## 💡 Tecnologías clave
-- **Spring Boot 3.x**
-- **Spring Data JPA**
-- **Hibernate**
-- **Criteria API** para consultas dinámicas
-- **Jakarta Persistence**
+## Requisitos del Sistema
+| Componente | Versión |
+|------------|---------|
+| Java       | 17+     |
+| MySQL      | 8+      |
+| Maven      | 3.6+    |
 
-## 📌 Personalización
-Para adaptar el proyecto:
-1. Configurar conexión a BD en `application.properties`
-2. Modificar entidades según necesidades
-3. Añadir nuevos repositorios y consultas
-4. Implementar seguridad con Spring Security
+## Buenas Prácticas Implementadas
+- Uso de `spring.jpa.hibernate.ddl-auto=update` en producción
+- Configuración para formato SQL legible
+- Sincronización bidireccional en relaciones `@ManyToMany`
+- Manejo de fechas con `java.time` (LocalDate)
 
-## 🌟 Destacados
-- **Consultas dinámicas** con CriteriaBuilder
-- **Paginación** integrada
-- **Validación** de parámetros
-- **Manejo de fechas** con LocalDate
-- **Relaciones bidireccionales** correctamente mapeadas
+## Autor
+Kevin Gómez Valderas - 2º DAM
+
+## Notas de Implementación
+1. Cambiar `ddl-auto` a `update` después del primer despliegue:
+properties
+spring.jpa.hibernate.ddl-auto=update
+
+2. Los datos de prueba se generan automáticamente al iniciar la aplicación
+3. Consultas nativas para operaciones complejas con fechas
+```java
+@Query(value = "SELECT * FROM clientes WHERE fecha_registro > :fecha", nativeQuery = true)
+List<Clientes> findClientesRegistradosDespuesDe(Date fecha);
+
+
