@@ -1,4 +1,4 @@
-# README - Traductor XML de Libros
+# Traductor XML de Libros
 
 ## 📝 Descripción
 Aplicación Java para traducir archivos XML de catálogos de libros de inglés a español. El programa toma un archivo XML con estructura en inglés y genera un nuevo archivo XML con las etiquetas traducidas al español, conservando todos los datos.

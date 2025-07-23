@@ -1,10 +1,8 @@
-
-package Unidad01.Practica10;
+package lecturaxml;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.io.File;
 import java.io.PrintStream;
 import java.io.FileNotFoundException;
@@ -23,8 +21,8 @@ import org.xml.sax.SAXException;
 public class XMLReader {
 
     private static final String INDENT_CHAR = " ";
-    
-    public static void muestraNodo ( Node nodo, int level, PrintStream ps ){
+
+    public static void muestraNodo(Node nodo, int level, PrintStream ps) {
         // Indentar el contenido según el nivel
         for (int i = 0; i < level; i++) {
             ps.print(INDENT_CHAR);
@@ -75,10 +73,10 @@ public class XMLReader {
             }
             ps.println("</" + nodo.getNodeName() + ">");
         }
-        
+
     }
-    
-    public static void main( String [] args){
+
+    public static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Debe proporcionar el nombre del archivo XML como argumento.");
             return;
@@ -95,11 +93,11 @@ public class XMLReader {
             Document doc = db.parse(new File(nomFich));
             muestraNodo(doc, 0, System.out);
         } catch (FileNotFoundException | ParserConfigurationException | SAXException ex) {
-            System.out.println(ex.getMessage());
+            System.err.println(ex.getMessage());
         } catch (IOException e) {
             System.err.println("\nERROR: " + e.getMessage());
         }
-        
+
     }
-    
+
 }

@@ -1,10 +1,8 @@
-
-package Unidad02.Practica02;
+package escrituraxml;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +15,6 @@ import org.xml.sax.SAXException;
 
 public class MostrarTitulos {
 
-    
     /**
      * @param args the command line arguments
      */
@@ -26,9 +23,9 @@ public class MostrarTitulos {
             // Crear DocumentBuilder para leer el XML
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            
+
             // Leer el archivo XML
-            Document doc = builder.parse("BOOKS.xml");
+            Document doc = builder.parse("src\\xml\\BOOKS.xml");
             doc.getDocumentElement().normalize();
 
             // Obtener todos los elementos "title"
@@ -42,8 +39,8 @@ public class MostrarTitulos {
             }
 
         } catch (IOException | ParserConfigurationException | DOMException | SAXException e) {
-            System.err.println("\nERROR: "+e.getMessage());
+            System.err.println("\nERROR: " + e.getMessage());
         }
     }
-    
+
 }

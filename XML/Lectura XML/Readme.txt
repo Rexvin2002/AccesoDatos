@@ -1,4 +1,4 @@
-# README - XMLReader
+# XMLReader
 
 ## 📝 Descripción
 Clase Java para leer y mostrar archivos XML de forma estructurada y legible. El programa analiza documentos XML y los muestra en la consola con un formato indentado que refleja la jerarquía del documento.

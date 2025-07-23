@@ -1,10 +1,8 @@
-
-package Unidad02.Practica02;
+package escrituraxml;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -28,12 +26,12 @@ public class TraducirXML {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         try {
             // Crear DocumentBuilder para leer el XML
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse("BOOKS.xml");
+            Document doc = builder.parse("src\\xml\\BOOKS.xml");
             doc.getDocumentElement().normalize();
 
             // Crear un nuevo documento vacío
@@ -68,19 +66,19 @@ public class TraducirXML {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(newDoc);
-            
-            File f = new File("libros.xml");
+
+            File f = new File("src\\xml\\libros.xml");
             f.createNewFile();
             StreamResult result = new StreamResult(f);
 
             transformer.transform(source, result);
-            
+
             mostrarTitulos(doc);
-            
+
             System.out.println("\nArchivo traducido guardado como libros.xml");
 
         } catch (IOException | ParserConfigurationException | TransformerException | DOMException | SAXException e) {
-            System.err.println("\nERROR: "+e.getMessage());
+            System.err.println("\nERROR: " + e.getMessage());
         }
     }
 
@@ -92,8 +90,8 @@ public class TraducirXML {
             parentElement.appendChild(newTagElement);
         }
     }
-    
-    private static void mostrarTitulos(Document doc){
+
+    private static void mostrarTitulos(Document doc) {
         doc.getDocumentElement().normalize();
 
         // Obtener todos los elementos "title"
@@ -107,4 +105,3 @@ public class TraducirXML {
         }
     }
 }
-    
