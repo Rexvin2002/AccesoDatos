@@ -25,6 +25,46 @@ public interface RepositorioClientes extends JpaRepository<Clientes, Long> {
     @Modifying
     @Query("UPDATE Clientes c SET c.direccion = :direccion WHERE c.idCliente = :id")
     int actualizarDireccion(@Param("id") Long id, @Param("direccion") String direccion);
+
+    // 1. Varios OR, AND, LIKE mezclados
+    @Query("SELECT c FROM Clientes c WHERE "
+            + "(c.nombre LIKE %:nombre% OR c.apellido LIKE %:nombre%) "
+            + "AND c.direccion LIKE %:direccion% "
+            + "AND (c.email IS NOT NULL OR c.telefono IS NOT NULL)")
+    List<Clientes> findClientesComplejo(
+            @Param("nombre") String nombre,
+            @Param("direccion") String direccion
+    );
+
+    // 2. ORDER BY dinámico (usando SpEL)
+    @Query("SELECT c FROM Clientes c WHERE c.fechaRegistro > :fecha ORDER BY "
+            + "CASE WHEN :orden = 'nombre' THEN c.nombre END ASC, "
+            + "CASE WHEN :orden = 'apellido' THEN c.apellido END ASC, "
+            + "CASE WHEN :orden = 'fecha' THEN c.fechaRegistro END DESC")
+    List<Clientes> findClientesConOrden(
+            @Param("fecha") Date fecha,
+            @Param("orden") String orden
+    );
+
+    // 3. greaterThan y currentDate
+    @Query("SELECT c FROM Clientes c WHERE c.fechaRegistro > :fechaMinima "
+            + "AND c.fechaRegistro < CURRENT_DATE")
+    List<Clientes> findClientesEntreFechas(
+            @Param("fechaMinima") Date fechaMinima
+    );
+
+    // 4. selectCase (Opcional)
+    @Query("SELECT c.idCliente, c.nombre, "
+            + "CASE WHEN c.fechaRegistro > :fechaLimite THEN 'Nuevo' ELSE 'Antiguo' END "
+            + "FROM Clientes c ORDER BY c.nombre")
+    List<Object[]> findClientesConCategoria(
+            @Param("fechaLimite") Date fechaLimite
+    );
+
+    // 5. Sum() y groupBy() (Opcional)
+    @Query("SELECT c.idCliente, c.nombre, SUM(COALESCE(p.total, 0)) "
+            + "FROM Clientes c LEFT JOIN c.pedidos p "
+            + "GROUP BY c.idCliente, c.nombre "
+            + "ORDER BY SUM(p.total) DESC")
+    List<Object[]> findTotalPedidosPorCliente();
 }
-
-
