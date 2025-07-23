@@ -1,5 +1,8 @@
 package com.proyectomaven.springexample.Criteria;
 
+/**
+ * Kevin Gómez Valderas 2ºDAM
+ */
 import com.proyectomaven.springexample.Entities.DetallePedido;
 import com.proyectomaven.springexample.Entities.Pedido;
 import com.proyectomaven.springexample.Entities.Producto;

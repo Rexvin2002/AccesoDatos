@@ -1,5 +1,8 @@
 package com.proyectomaven.springexample.Criteria;
 
+/**
+ * Kevin Gómez Valderas 2ºDAM
+ */
 import com.proyectomaven.springexample.Entities.CarritoCompras;
 import com.proyectomaven.springexample.Entities.Clientes;
 import jakarta.persistence.EntityManager;

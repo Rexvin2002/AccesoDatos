@@ -51,7 +51,7 @@ public class Producto {
 
     @ManyToMany(mappedBy = "productos")
     private Set<Proveedor> proveedores = new HashSet<>();
-    
+
     // Constructores, getters y setters
     public Producto() {
     }
