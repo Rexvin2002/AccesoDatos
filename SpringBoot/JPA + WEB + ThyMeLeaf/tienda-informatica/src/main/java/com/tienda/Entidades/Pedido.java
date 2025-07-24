@@ -1,9 +1,8 @@
 package com.tienda.Entidades;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

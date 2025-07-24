@@ -1,9 +1,8 @@
 package com.tienda.Entidades;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -15,6 +14,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Producto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

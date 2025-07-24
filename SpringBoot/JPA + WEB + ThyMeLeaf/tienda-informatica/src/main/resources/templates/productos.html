@@ -1,109 +1,109 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Lista de Productos</title>
+    <head>
+        <title>Lista de Productos</title>
 
-    <style>
-        /* Estilos comunes para todas las páginas */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
+        <style>
+            /* Estilos comunes para todas las páginas */
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin-top: 50px;
+            }
 
-        .menu {
-            list-style-type: none;
-            padding: 0;
-        }
+            .menu {
+                list-style-type: none;
+                padding: 0;
+            }
 
-        .menu li {
-            display: inline;
-            margin: 20px;
-        }
+            .menu li {
+                display: inline;
+                margin: 20px;
+            }
 
-        .menu a {
-            text-decoration: none;
-            font-size: 18px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
-        }
+            .menu a {
+                text-decoration: none;
+                font-size: 18px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+            }
 
-        .menu a:hover {
-            background-color: #45a049;
-        }
+            .menu a:hover {
+                background-color: #45a049;
+            }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
+            table {
+                width: 80%;
+                margin: 20px auto;
+                border-collapse: collapse;
+            }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
+            th,
+            td {
+                padding: 10px;
+                text-align: center;
+                border: 1px solid #ddd;
+            }
 
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
 
-        td {
-            background-color: #f9f9f9;
-        }
+            td {
+                background-color: #f9f9f9;
+            }
 
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            button {
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
+            button:hover {
+                background-color: #45a049;
+            }
+        </style>
+    </head>
 
-<body>
-    <h1>Lista de Productos</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Descripción</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="producto : ${productos}">
-                <td th:text="${producto.id}"></td>
-                <td th:text="${producto.nombre}"></td>
-                <td th:text="${producto.precio}"></td>
-                <td th:text="${producto.stock}"></td>
-                <td th:text="${producto.descripcion}"></td>
-                <td>
-                    <button type="button" th:onclick="'window.location.href=\'/productos/delete/' + ${producto.id} + '\';'">
-                        Eliminar
-                    </button>
-                    
+    <body>
+        <h1>Lista de Productos</h1>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="producto : ${productos}">
+                    <td th:text="${producto.id}"></td>
+                    <td th:text="${producto.nombre}"></td>
+                    <td th:text="${producto.precio}"></td>
+                    <td th:text="${producto.stock}"></td>
+                    <td th:text="${producto.descripcion}"></td>
+                    <td>
+                        <button type="button" th:onclick="'window.location.href=\'/productos/delete/' + ${producto.id} + '\';'">
+                            Eliminar
+                        </button>
 
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <button type="button" onclick="window.location.href='/productos/add'">Añadir Producto</button>
-    <button type="button" onclick="window.location.href='/'">Volver</button>
-</body>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" onclick="window.location.href = '/productos/add'">Añadir Producto</button>
+        <button type="button" onclick="window.location.href = '/'">Volver</button>
+    </body>
 
 </html>

@@ -1,9 +1,8 @@
 package com.example.demo.Repositories;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
@@ -11,7 +10,8 @@ import com.example.demo.Entities.Producto;
 
 @Repository
 public class ProductoRepository {
-    private List<Producto> productos;
+
+    private final List<Producto> productos;
 
     public ProductoRepository() {
         productos = new ArrayList<>();

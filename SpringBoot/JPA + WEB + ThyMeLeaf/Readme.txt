@@ -1,4 +1,4 @@
-# README - Sistema de Gestión de Tienda con Spring Boot
+# Sistema de Gestión de Tienda con Spring Boot
 
 ## 📝 Descripción
 Aplicación Spring Boot completa para gestión de tienda con:
@@ -101,39 +101,91 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 }
 ```
 
-## 📌 Estructura del proyecto
-```
-src/
-├── main/
-│   ├── java/com/tienda/
-│   │   ├── TiendaApplication.java
-│   │   ├── Controladores/
-│   │   │   └── WebController.java
-│   │   ├── Entidades/
-│   │   │   ├── Cliente.java
-│   │   │   ├── DetallePedido.java
-│   │   │   ├── Pedido.java
-│   │   │   └── Producto.java
-│   │   ├── Repositorios/
-│   │   │   ├── ClienteRepository.java
-│   │   │   ├── DetallePedidoRepository.java
-│   │   │   ├── PedidoRepository.java
-│   │   │   └── ProductoRepository.java
-│   │   └── StringToDateConverter.java
-│   └── resources/
-│       ├── static/
-│       ├── templates/
-│       │   ├── index.html
-│       │   ├── productos.html
-│       │   ├── add-producto.html
-│       │   ├── clientes.html
-│       │   ├── add-cliente.html
-│       │   ├── pedidos.html
-│       │   ├── add-pedido.html
-│       │   └── detallePedido.html
-│       ├── application.properties
-│       └── data.sql (opcional)
-```
+# MODELO ENTIDAD-RELACIÓN (E/R) PARA SISTEMA DE TIENDA
+
+ENTIDADES Y ATRIBUTOS:
+---------------------
+
+* CLIENTE
+  - id (PK)
+  - nombre
+  - email
+  - telefono
+  - direccion
+
+* PRODUCTO
+  - id (PK)
+  - nombre
+  - precio
+  - stock
+  - descripcion
+
+* PEDIDO
+  - id (PK)
+  - fecha
+  - total
+  - cliente_id (FK)
+
+* DETALLE_PEDIDO
+  - id (PK)
+  - cantidad
+  - subtotal
+  - producto_id (FK)
+  - pedido_id (FK)
+
+RELACIONES:
+-----------
+1. CLIENTE (1) --- REALIZA --- (N) PEDIDO
+2. PEDIDO (1) --- CONTIENE --- (N) DETALLE_PEDIDO
+3. PRODUCTO (1) --- APARECE_EN --- (N) DETALLE_PEDIDO
+
+MODELO RELACIONAL:
+------------------
+
+CLIENTE(
+  id INT PK,
+  nombre VARCHAR,
+  email VARCHAR,
+  telefono VARCHAR,
+  direccion VARCHAR
+)
+
+PRODUCTO(
+  id INT PK,
+  nombre VARCHAR,
+  precio DECIMAL,
+  stock INT,
+  descripcion TEXT
+)
+
+PEDIDO(
+  id INT PK,
+  fecha DATE,
+  total DECIMAL,
+  cliente_id INT FK REFERENCES CLIENTE(id)
+)
+
+DETALLE_PEDIDO(
+  id INT PK,
+  cantidad INT,
+  subtotal DECIMAL,
+  producto_id INT FK REFERENCES PRODUCTO(id),
+  pedido_id INT FK REFERENCES PEDIDO(id)
+)
+
+CARDINALIDADES:
+---------------
+- Un cliente puede tener muchos pedidos (1:N)
+- Un pedido puede tener muchos detalles (1:N)
+- Un producto puede aparecer en muchos detalles de pedido (1:N)
+
+OBSERVACIONES:
+--------------
+- Las relaciones están implementadas con JPA mediante:
+  * @ManyToOne para las relaciones N:1
+  * @OneToMany para las relaciones 1:N
+- Cada entidad tiene su correspondiente clave primaria (@Id)
+- Las relaciones están correctamente mapeadas con @JoinColumn
 
 ## 👨‍💻 Autor
 Kevin Gómez Valderas

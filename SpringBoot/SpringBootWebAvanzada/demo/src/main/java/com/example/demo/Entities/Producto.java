@@ -1,10 +1,10 @@
 package com.example.demo.Entities;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 public class Producto {
+
     private Integer id;
     private String concepto;
     private Double importe;

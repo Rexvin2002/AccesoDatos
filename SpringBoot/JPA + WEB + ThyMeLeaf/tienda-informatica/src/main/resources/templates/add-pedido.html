@@ -1,201 +1,201 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title>Añadir Pedido</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
+    <head>
+        <title>Añadir Pedido</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 20px;
+            }
 
-        .form-container {
-            width: 80%;
-            margin: 0 auto;
-            text-align: left;
-        }
+            .form-container {
+                width: 80%;
+                margin: 0 auto;
+                text-align: left;
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+            .form-group {
+                margin-bottom: 20px;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
 
-        select,
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+            select,
+            input {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
 
-        .productos-table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
+            .productos-table {
+                width: 100%;
+                margin-top: 20px;
+                border-collapse: collapse;
+            }
 
-        .productos-table th,
-        .productos-table td {
-            padding: 10px;
-            text-align: center;
+            .productos-table th,
+            .productos-table td {
+                padding: 10px;
+                text-align: center;
 
-            vertical-align: middle;
-            border: 1px solid #ddd;
-        }
+                vertical-align: middle;
+                border: 1px solid #ddd;
+            }
 
 
-        .productos-table th {
-            background-color: #4CAF50;
-            color: white;
-        }
+            .productos-table th {
+                background-color: #4CAF50;
+                color: white;
+            }
 
-        .productos-table td {
-            padding: 10px;
-            text-align: center;
-            vertical-align: middle;
-            border: 1px solid #ddd;
-        }
+            .productos-table td {
+                padding: 10px;
+                text-align: center;
+                vertical-align: middle;
+                border: 1px solid #ddd;
+            }
 
-        .inputs input {
-            padding: 10px;
-            margin: 10px 0;
-            width: 80%;
-            border: none;
-            border-radius: 5px;
-            text-align: center;
-        }
+            .inputs input {
+                padding: 10px;
+                margin: 10px 0;
+                width: 80%;
+                border: none;
+                border-radius: 5px;
+                text-align: center;
+            }
 
-        .inputs {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            /* Ocupa toda la altura de la ventana */
-        }
+            .inputs {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                /* Ocupa toda la altura de la ventana */
+            }
 
-        .cantidad-input {
-            width: 80px;
-            text-align: center;
-        }
+            .cantidad-input {
+                width: 80px;
+                text-align: center;
+            }
 
-        .subtotal {
-            font-weight: bold;
-        }
+            .subtotal {
+                font-weight: bold;
+            }
 
-        .productos-table .subtotal {
-            width: 100px;
-            text-align: right;
-        }
+            .productos-table .subtotal {
+                width: 100px;
+                text-align: right;
+            }
 
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
+            button {
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 5px;
+            }
 
-        button:hover {
-            background-color: #45a049;
-        }
+            button:hover {
+                background-color: #45a049;
+            }
 
-        .total {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-top: 20px;
-            text-align: right;
-        }
-    </style>
+            .total {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin-top: 20px;
+                text-align: right;
+            }
+        </style>
 
-    <script>
-        function calcularSubtotal(precio, input) {
-            const cantidad = input.value;
-            const row = input.closest('tr');
-            const subtotalElement = row.querySelector('.subtotal');
-            const subtotal = precio * cantidad;
-            subtotalElement.textContent = subtotal.toFixed(2) + ' €';
-            calcularTotal();
-        }
+        <script>
+            function calcularSubtotal(precio, input) {
+                const cantidad = input.value;
+                const row = input.closest('tr');
+                const subtotalElement = row.querySelector('.subtotal');
+                const subtotal = precio * cantidad;
+                subtotalElement.textContent = subtotal.toFixed(2) + ' €';
+                calcularTotal();
+            }
 
-        function calcularTotal() {
-            const subtotales = document.querySelectorAll('.subtotal');
-            let total = 0;
-            subtotales.forEach(element => {
-                const valor = parseFloat(element.textContent);
-                if (!isNaN(valor)) {
-                    total += valor;
-                }
-            });
-            document.getElementById('total').textContent = 'Total: ' + total.toFixed(2) + ' €';
-        }
-    </script>
-</head>
+            function calcularTotal() {
+                const subtotales = document.querySelectorAll('.subtotal');
+                let total = 0;
+                subtotales.forEach(element => {
+                    const valor = parseFloat(element.textContent);
+                    if (!isNaN(valor)) {
+                        total += valor;
+                    }
+                });
+                document.getElementById('total').textContent = 'Total: ' + total.toFixed(2) + ' €';
+            }
+        </script>
+    </head>
 
-<body>
-    <h1>Añadir Pedido</h1>
+    <body>
+        <h1>Añadir Pedido</h1>
 
-    <div class="form-container">
-        <form th:action="@{/pedidos/add}" method="post">
-            <div class="form-group">
-                <label for="cliente">Cliente:</label>
-                <select id="cliente" name="cliente.id" required>
-                    <option value="">Seleccione un cliente</option>
-                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}">
-                    </option>
-                </select>
-            </div>
+        <div class="form-container">
+            <form th:action="@{/pedidos/add}" method="post">
+                <div class="form-group">
+                    <label for="cliente">Cliente:</label>
+                    <select id="cliente" name="cliente.id" required>
+                        <option value="">Seleccione un cliente</option>
+                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre}">
+                        </option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" required>
-            </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
 
-            <table class="productos-table">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="producto : ${productos}">
-                        <td>
-                            <input type="hidden" name="productos" th:value="${producto.id}">
-                            <span th:text="${producto.nombre}"></span>
-                        </td>
-                        <td th:text="${producto.precio + ' €'}"></td>
-                        <td th:text="${producto.stock}"></td>
-                        <td class="inputs">
-                            <input type="number" name="cantidades" class="cantidad-input" min="0"
-                                th:max="${producto.stock}" value="0"
-                                th:onchange="'calcularSubtotal(' + ${producto.precio} + ', this)'">
-                        </td>
-                        <td class="subtotal">0.00 €</td>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="productos-table">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="producto : ${productos}">
+                            <td>
+                                <input type="hidden" name="productos" th:value="${producto.id}">
+                                <span th:text="${producto.nombre}"></span>
+                            </td>
+                            <td th:text="${producto.precio + ' €'}"></td>
+                            <td th:text="${producto.stock}"></td>
+                            <td class="inputs">
+                                <input type="number" name="cantidades" class="cantidad-input" min="0"
+                                       th:max="${producto.stock}" value="0"
+                                       th:onchange="'calcularSubtotal(' + ${producto.precio} + ', this)'">
+                            </td>
+                            <td class="subtotal">0.00 €</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <div class="total" id="total">Total: 0.00 €</div>
+                <div class="total" id="total">Total: 0.00 €</div>
 
-            <div style="text-align: center; margin-top: 20px;">
-                <button type="submit">Guardar Pedido</button>
-                <button type="button" onclick="window.location.href='/pedidos'">Cancelar</button>
-            </div>
-        </form>
-    </div>
-</body>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="submit">Guardar Pedido</button>
+                    <button type="button" onclick="window.location.href = '/pedidos'">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </body>
 
 </html>

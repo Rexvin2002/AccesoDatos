@@ -1,9 +1,8 @@
 package com.tienda.Controladores;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

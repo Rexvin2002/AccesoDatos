@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Añadir Producto</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
+    <head>
+        <title>Añadir Producto</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin-top: 50px;
+            }
 
-        form {
-            width: 50%;
-            margin: 0 auto;
-            text-align: left;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
+            form {
+                width: 50%;
+                margin: 0 auto;
+                text-align: left;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                background-color: #f9f9f9;
+            }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+            .form-group {
+                margin-bottom: 15px;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
 
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+            input[type="text"],
+            input[type="number"] {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
 
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            height: 100px;
-            resize: vertical;
-        }
+            textarea {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;
+                height: 100px;
+                resize: vertical;
+            }
 
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
+            button {
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin: 5px;
+            }
 
-        button:hover {
-            background-color: #45a049;
-        }
+            button:hover {
+                background-color: #45a049;
+            }
 
-        .buttons-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Añadir Nuevo Producto</h1>
-    
-    <form th:action="@{/productos/add}" th:object="${producto}" method="post">
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" th:field="*{nombre}" required />
-        </div>
+            .buttons-container {
+                text-align: center;
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Añadir Nuevo Producto</h1>
 
-        <div class="form-group">
-            <label for="precio">Precio:</label>
-            <input type="number" id="precio" th:field="*{precio}" step="0.01" required />
-        </div>
+        <form th:action="@{/productos/add}" th:object="${producto}" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" th:field="*{nombre}" required />
+            </div>
 
-        <div class="form-group">
-            <label for="stock">Stock:</label>
-            <input type="number" id="stock" th:field="*{stock}" required />
-        </div>
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" th:field="*{precio}" step="0.01" required />
+            </div>
 
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" th:field="*{descripcion}"></textarea>
-        </div>
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" th:field="*{stock}" required />
+            </div>
 
-        <div class="buttons-container">
-            <button type="submit">Guardar</button>
-            <button type="button" onclick="window.location.href='/productos'">Cancelar</button>
-        </div>
-    </form>
-</body>
+            <div class="form-group">
+                <label for="descripcion">Descripción:</label>
+                <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+            </div>
+
+            <div class="buttons-container">
+                <button type="submit">Guardar</button>
+                <button type="button" onclick="window.location.href = '/productos'">Cancelar</button>
+            </div>
+        </form>
+    </body>
 </html>

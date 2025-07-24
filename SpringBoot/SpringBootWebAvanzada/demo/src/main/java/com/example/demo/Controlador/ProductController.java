@@ -1,9 +1,8 @@
 package com.example.demo.Controlador;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

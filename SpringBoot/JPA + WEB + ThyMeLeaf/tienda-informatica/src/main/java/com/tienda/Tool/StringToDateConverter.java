@@ -1,9 +1,8 @@
-package com.tienda;
+package com.tienda.Tool;
 
 /**
- * Kevin Gómez Valderas           2ºDAM
+ * Kevin Gómez Valderas 2ºDAM
  */
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StringToDateConverter implements Converter<String, Date> {
+
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
 
