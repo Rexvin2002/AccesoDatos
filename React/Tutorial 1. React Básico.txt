@@ -1,0 +1,13 @@
+Node.JS [Requerido para React]
+
+Crear un proyecto REACT con VITE, desde un terminal:
+
+npm create vite@latest  (seguir los pasos escogiendo React + JS)
+
+cd <nombre-proyecto>
+
+npm install (para instalar todo)
+
+npm run dev (para ejecutar servidor web)
+
+Se debe crear el proyecto con todas las carpetas / ficheros necesarios.

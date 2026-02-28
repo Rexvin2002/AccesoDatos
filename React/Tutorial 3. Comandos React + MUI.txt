@@ -1,0 +1,16 @@
+REACT + MATERIAL
+
+Vamos a usar componentes con estilo Google Material desde una nueva web AppFinanzas
+
+1º npm install @mui/material @emotion/react @emotion/styled            (Incluimos las librerías de MUI)
+
+2º npm install @fontsource/roboto       (Incluimos las Fuentes de Google)
+
+3º npm install @mui/icons-material       (Incluimos los iconos de MUI)
+
+
+4º Seguir pasos de guía de MUI:     https://mui.com/material-ui/getting-started/
+
+5º Utilizar Componentes Gratis:      https://mui.com/material-ui/all-components/
+
+6º Documentación de los componentes:      https://mui.com/base-ui/react-badge/components-api/#badge     

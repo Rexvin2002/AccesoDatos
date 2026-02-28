@@ -1,0 +1,59 @@
+0. Instalar la última versión de NODE.JS
+
+https://nodejs.org/es
+
+1. Creamos un proyecto en React + VITE
+
+npm create vite@latest   (Damos nombre al proyecto y elegimos React + TypeScript)
+
+2. Ejecutamos el proyecto 
+
+cd miproyecto
+
+npm install
+
+npm run dev
+
+3. Añadir Componentes MUI a nuestro proyecto 
+
+cd miproyecto
+
+npm install @mui/material @emotion/react @emotion/styled
+
+npm install @fontsource/roboto
+
+npm install @mui/icons-material
+
+4. Instalar Extras de React
+
+npm i react-router-dom
+npm install react-hooks
+5. Crear un componente nuevo 
+
+A) Creación de Componente
+
+new Folder > /components/
+
+cd /components
+
+new File > MiComponente.tsx con el contenido mínimo (1 función + export)
+
+        function MiComponente() {
+
+              return (
+
+                   <h1> Codigo HTML dentro del RETURN </h1>
+
+              );
+
+        }
+
+       export default MiComponente;
+
+Para usar el nuevo componente desde otro componente, por ejemplo en App.jsx  hago solo dos cosas:
+
+    import MiComponente from "./components/MiComponente";
+
+   <MiComponente></MiComponente>
+
+Alternativamente se puede utilizar la Extensión de Visual Code "ES7+ React/Redux" para crear componentes, y tras crear un fichero JSX nuevo escribimos las letras rfce (React Functional Component Extension).

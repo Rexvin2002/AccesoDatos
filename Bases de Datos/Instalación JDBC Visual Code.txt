@@ -1,0 +1,51 @@
+1º Descargar el DRIVER Java el motor de Base de Datos MySQL. Descargaremos el fichero ZIP/JAR (Platform Independent) para poder usarlo en cualquier S.O.
+
+           https://downloads.mysql.com/archives/c-j/
+
+2º En Visual Code crear un Proyecto Java.
+
+3º Dentro de la carpeta LIB del Proyecto copiar el fichero mysql-connector-j-9.0.0.jar
+
+4º Consultamos la librería Java para SQL java.sql en https://docs.oracle.com/javase/8/docs/api/index.html?java/sql/package-summary.html
+
+        Class Connection   https://docs.oracle.com/javase/8/docs/api/java/sql/Connection.html
+
+        Class Statement   https://docs.oracle.com/javase/8/docs/api/java/sql/Statement.html
+
+        Class ResultSet     https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html
+
+5º Probamos que todo funciona con este código simple: 
+
+
+import java.sql.*;
+
+public class App {
+
+ public static void main(String[] args) 
+
+ {
+
+ // Cargar el DRIVER MYSQL manualmente
+ // NO ES NECESARIO DESDE JAVA SE 6
+
+ try
+
+ {
+
+ Class.forName("com.mysql.cj.jdbc.Driver");
+
+ }
+
+ catch( Exception ex)
+
+ {
+
+ ex = ex;
+
+ }
+
+ } // End Main()
+
+ 
+
+} // End Class
